@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit InspectionConvoi{% endblock %}
+
+{% block body %}
+    <h1>Edit InspectionConvoi</h1>
+
+    {{ include('inspection_convoi/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_inspection_convoi_index') }}">back to list</a>
+
+    {{ include('inspection_convoi/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SurveillanceTaxiMoto index{% endblock %}
+
+{% block body %}
+    <h1>SurveillanceTaxiMoto index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Matricule</th>
+                <th>Numero_recu</th>
+                <th>Lieu_emission</th>
+                <th>Date_emission</th>
+                <th>Nom_dem</th>
+                <th>Corporation</th>
+                <th>Telephone_dem</th>
+                <th>M_matricule</th>
+                <th>Marque_moto</th>
+                <th>Inspecteur1</th>
+                <th>Inspecteur2</th>
+                <th>Inspecteur3</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for surveillance_taxi_moto in surveillance_taxi_motos %}
+            <tr>
+                <td>{{ surveillance_taxi_moto.id }}</td>
+                <td>{{ surveillance_taxi_moto.matricule }}</td>
+                <td>{{ surveillance_taxi_moto.numeroRecu }}</td>
+                <td>{{ surveillance_taxi_moto.lieuEmission }}</td>
+                <td>{{ surveillance_taxi_moto.dateEmission ? surveillance_taxi_moto.dateEmission|date('Y-m-d') : '' }}</td>
+                <td>{{ surveillance_taxi_moto.nomDem }}</td>
+                <td>{{ surveillance_taxi_moto.corporation }}</td>
+                <td>{{ surveillance_taxi_moto.telephoneDem }}</td>
+                <td>{{ surveillance_taxi_moto.mMatricule }}</td>
+                <td>{{ surveillance_taxi_moto.marqueMoto }}</td>
+                <td>{{ surveillance_taxi_moto.inspecteur1 }}</td>
+                <td>{{ surveillance_taxi_moto.inspecteur2 }}</td>
+                <td>{{ surveillance_taxi_moto.inspecteur3 }}</td>
+                <td>
+                    <a href="{{ path('app_surveillance_taxi_moto_show', {'matricule': surveillance_taxi_moto.matricule}) }}">show</a>
+                    <a href="{{ path('app_surveillance_taxi_moto_edit', {'matricule': surveillance_taxi_moto.matricule}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="14">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_surveillance_taxi_moto_new') }}">Create new</a>
+{% endblock %}

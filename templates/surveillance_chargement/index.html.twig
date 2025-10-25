@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SurveillanceChargement index{% endblock %}
+
+{% block body %}
+    <h1>SurveillanceChargement index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Matricule</th>
+                <th>Numero_recu</th>
+                <th>Lieu_emission</th>
+                <th>Date_emission</th>
+                <th>R_organisation</th>
+                <th>R_nationalite</th>
+                <th>R_addresse</th>
+                <th>R_telephone</th>
+                <th>V_matricule</th>
+                <th>Type_charge</th>
+                <th>Tonnage_kg</th>
+                <th>Signalisation</th>
+                <th>Couverture</th>
+                <th>P_depart</th>
+                <th>P_arrivee</th>
+                <th>H_depart</th>
+                <th>H_arrivee</th>
+                <th>Nom_inspecteur</th>
+                <th>Approuvee</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for surveillance_chargement in surveillance_chargements %}
+            <tr>
+                <td>{{ surveillance_chargement.id }}</td>
+                <td>{{ surveillance_chargement.matricule }}</td>
+                <td>{{ surveillance_chargement.numeroRecu }}</td>
+                <td>{{ surveillance_chargement.lieuEmission }}</td>
+                <td>{{ surveillance_chargement.dateEmission ? surveillance_chargement.dateEmission|date('Y-m-d') : '' }}</td>
+                <td>{{ surveillance_chargement.rOrganisation }}</td>
+                <td>{{ surveillance_chargement.rNationalite }}</td>
+                <td>{{ surveillance_chargement.rAddresse }}</td>
+                <td>{{ surveillance_chargement.rTelephone }}</td>
+                <td>{{ surveillance_chargement.vMatricule }}</td>
+                <td>{{ surveillance_chargement.typeCharge }}</td>
+                <td>{{ surveillance_chargement.tonnageKg }}</td>
+                <td>{{ surveillance_chargement.signalisation ? 'Yes' : 'No' }}</td>
+                <td>{{ surveillance_chargement.couverture ? 'Yes' : 'No' }}</td>
+                <td>{{ surveillance_chargement.pDepart }}</td>
+                <td>{{ surveillance_chargement.pArrivee }}</td>
+                <td>{{ surveillance_chargement.hDepart ? surveillance_chargement.hDepart|date('H:i:s') : '' }}</td>
+                <td>{{ surveillance_chargement.hArrivee ? surveillance_chargement.hArrivee|date('H:i:s') : '' }}</td>
+                <td>{{ surveillance_chargement.nomInspecteur }}</td>
+                <td>{{ surveillance_chargement.approuvee ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_surveillance_chargement_show', {'matricule': surveillance_chargement.matricule}) }}">show</a>
+                    <a href="{{ path('app_surveillance_chargement_edit', {'matricule': surveillance_chargement.matricule}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="21">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_surveillance_chargement_new') }}">Create new</a>
+{% endblock %}

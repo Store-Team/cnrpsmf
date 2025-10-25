@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SurveillanceTaxiMoto{% endblock %}
+
+{% block body %}
+    <h1>SurveillanceTaxiMoto</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ surveillance_taxi_moto.id }}</td>
+            </tr>
+            <tr>
+                <th>Matricule</th>
+                <td>{{ surveillance_taxi_moto.matricule }}</td>
+            </tr>
+            <tr>
+                <th>Numero_recu</th>
+                <td>{{ surveillance_taxi_moto.numeroRecu }}</td>
+            </tr>
+            <tr>
+                <th>Lieu_emission</th>
+                <td>{{ surveillance_taxi_moto.lieuEmission }}</td>
+            </tr>
+            <tr>
+                <th>Date_emission</th>
+                <td>{{ surveillance_taxi_moto.dateEmission ? surveillance_taxi_moto.dateEmission|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nom_dem</th>
+                <td>{{ surveillance_taxi_moto.nomDem }}</td>
+            </tr>
+            <tr>
+                <th>Corporation</th>
+                <td>{{ surveillance_taxi_moto.corporation }}</td>
+            </tr>
+            <tr>
+                <th>Telephone_dem</th>
+                <td>{{ surveillance_taxi_moto.telephoneDem }}</td>
+            </tr>
+            <tr>
+                <th>M_matricule</th>
+                <td>{{ surveillance_taxi_moto.mMatricule }}</td>
+            </tr>
+            <tr>
+                <th>Marque_moto</th>
+                <td>{{ surveillance_taxi_moto.marqueMoto }}</td>
+            </tr>
+            <tr>
+                <th>Inspecteur1</th>
+                <td>{{ surveillance_taxi_moto.inspecteur1 }}</td>
+            </tr>
+            <tr>
+                <th>Inspecteur2</th>
+                <td>{{ surveillance_taxi_moto.inspecteur2 }}</td>
+            </tr>
+            <tr>
+                <th>Inspecteur3</th>
+                <td>{{ surveillance_taxi_moto.inspecteur3 }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_surveillance_taxi_moto_index') }}">back to list</a>
+
+    <a href="{{ path('app_surveillance_taxi_moto_edit', {'matricule': surveillance_taxi_moto.matricule}) }}">edit</a>
+
+    {{ include('surveillance_taxi_moto/_delete_form.html.twig') }}
+{% endblock %}

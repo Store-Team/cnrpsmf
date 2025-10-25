@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit SurveillanceTaxiMoto{% endblock %}
+
+{% block body %}
+    <h1>Edit SurveillanceTaxiMoto</h1>
+
+    {{ include('surveillance_taxi_moto/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_surveillance_taxi_moto_index') }}">back to list</a>
+
+    {{ include('surveillance_taxi_moto/_delete_form.html.twig') }}
+{% endblock %}

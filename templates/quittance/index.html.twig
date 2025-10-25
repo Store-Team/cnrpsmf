@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quittance index{% endblock %}
+
+{% block body %}
+    <h1>Quittance index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Matricule</th>
+                <th>Type_quittance</th>
+                <th>Lieu_emission</th>
+                <th>Date_emmision</th>
+                <th>Assujettif</th>
+                <th>Numero_perception</th>
+                <th>Montant_chiffres</th>
+                <th>Montant</th>
+                <th>Banque</th>
+                <th>Numero_compte</th>
+                <th>Mode_payement</th>
+                <th>Nature_impo</th>
+                <th>Receveur_drlu</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quittance in quittances %}
+            <tr>
+                <td>{{ quittance.id }}</td>
+                <td>{{ quittance.matricule }}</td>
+                <td>{{ quittance.typeQuittance }}</td>
+                <td>{{ quittance.lieuEmission }}</td>
+                <td>{{ quittance.dateEmmision ? quittance.dateEmmision|date('Y-m-d') : '' }}</td>
+                <td>{{ quittance.assujettif }}</td>
+                <td>{{ quittance.numeroPerception }}</td>
+                <td>{{ quittance.montantChiffres }}</td>
+                <td>{{ quittance.montant }}</td>
+                <td>{{ quittance.banque }}</td>
+                <td>{{ quittance.numeroCompte }}</td>
+                <td>{{ quittance.modePayement }}</td>
+                <td>{{ quittance.natureImpo }}</td>
+                <td>{{ quittance.receveurDrlu }}</td>
+                <td>
+                    <a href="{{ path('app_quittance_show', {'matricule': quittance.matricule}) }}">show</a>
+                    <a href="{{ path('app_quittance_edit', {'matricule': quittance.matricule}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="15">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_quittance_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SurveillanceChargement{% endblock %}
+
+{% block body %}
+    <h1>SurveillanceChargement</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ surveillance_chargement.id }}</td>
+            </tr>
+            <tr>
+                <th>Matricule</th>
+                <td>{{ surveillance_chargement.matricule }}</td>
+            </tr>
+            <tr>
+                <th>Numero_recu</th>
+                <td>{{ surveillance_chargement.numeroRecu }}</td>
+            </tr>
+            <tr>
+                <th>Lieu_emission</th>
+                <td>{{ surveillance_chargement.lieuEmission }}</td>
+            </tr>
+            <tr>
+                <th>Date_emission</th>
+                <td>{{ surveillance_chargement.dateEmission ? surveillance_chargement.dateEmission|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>R_organisation</th>
+                <td>{{ surveillance_chargement.rOrganisation }}</td>
+            </tr>
+            <tr>
+                <th>R_nationalite</th>
+                <td>{{ surveillance_chargement.rNationalite }}</td>
+            </tr>
+            <tr>
+                <th>R_addresse</th>
+                <td>{{ surveillance_chargement.rAddresse }}</td>
+            </tr>
+            <tr>
+                <th>R_telephone</th>
+                <td>{{ surveillance_chargement.rTelephone }}</td>
+            </tr>
+            <tr>
+                <th>V_matricule</th>
+                <td>{{ surveillance_chargement.vMatricule }}</td>
+            </tr>
+            <tr>
+                <th>Type_charge</th>
+                <td>{{ surveillance_chargement.typeCharge }}</td>
+            </tr>
+            <tr>
+                <th>Tonnage_kg</th>
+                <td>{{ surveillance_chargement.tonnageKg }}</td>
+            </tr>
+            <tr>
+                <th>Signalisation</th>
+                <td>{{ surveillance_chargement.signalisation ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Couverture</th>
+                <td>{{ surveillance_chargement.couverture ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>P_depart</th>
+                <td>{{ surveillance_chargement.pDepart }}</td>
+            </tr>
+            <tr>
+                <th>P_arrivee</th>
+                <td>{{ surveillance_chargement.pArrivee }}</td>
+            </tr>
+            <tr>
+                <th>H_depart</th>
+                <td>{{ surveillance_chargement.hDepart ? surveillance_chargement.hDepart|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>H_arrivee</th>
+                <td>{{ surveillance_chargement.hArrivee ? surveillance_chargement.hArrivee|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nom_inspecteur</th>
+                <td>{{ surveillance_chargement.nomInspecteur }}</td>
+            </tr>
+            <tr>
+                <th>Approuvee</th>
+                <td>{{ surveillance_chargement.approuvee ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_surveillance_chargement_index') }}">back to list</a>
+
+    <a href="{{ path('app_surveillance_chargement_edit', {'matricule': surveillance_chargement.matricule}) }}">edit</a>
+
+    {{ include('surveillance_chargement/_delete_form.html.twig') }}
+{% endblock %}

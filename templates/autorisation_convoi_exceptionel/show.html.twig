@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AutorisationConvoiExceptionel{% endblock %}
+
+{% block body %}
+    <h1>AutorisationConvoiExceptionel</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ autorisation_convoi_exceptionel.id }}</td>
+            </tr>
+            <tr>
+                <th>Matricule</th>
+                <td>{{ autorisation_convoi_exceptionel.matricule }}</td>
+            </tr>
+            <tr>
+                <th>Lieu_emission</th>
+                <td>{{ autorisation_convoi_exceptionel.lieuEmission }}</td>
+            </tr>
+            <tr>
+                <th>Date_emission</th>
+                <td>{{ autorisation_convoi_exceptionel.dateEmission ? autorisation_convoi_exceptionel.dateEmission|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>R_type</th>
+                <td>{{ autorisation_convoi_exceptionel.rType }}</td>
+            </tr>
+            <tr>
+                <th>R_nationalite</th>
+                <td>{{ autorisation_convoi_exceptionel.rNationalite }}</td>
+            </tr>
+            <tr>
+                <th>R_addresse</th>
+                <td>{{ autorisation_convoi_exceptionel.rAddresse }}</td>
+            </tr>
+            <tr>
+                <th>R_telephone</th>
+                <td>{{ autorisation_convoi_exceptionel.rTelephone }}</td>
+            </tr>
+            <tr>
+                <th>V_matricule</th>
+                <td>{{ autorisation_convoi_exceptionel.vMatricule }}</td>
+            </tr>
+            <tr>
+                <th>V_marque</th>
+                <td>{{ autorisation_convoi_exceptionel.vMarque }}</td>
+            </tr>
+            <tr>
+                <th>V_type</th>
+                <td>{{ autorisation_convoi_exceptionel.vType }}</td>
+            </tr>
+            <tr>
+                <th>Type_charge</th>
+                <td>{{ autorisation_convoi_exceptionel.typeCharge }}</td>
+            </tr>
+            <tr>
+                <th>Tonnage_kg</th>
+                <td>{{ autorisation_convoi_exceptionel.tonnageKg }}</td>
+            </tr>
+            <tr>
+                <th>Longueur</th>
+                <td>{{ autorisation_convoi_exceptionel.longueur }}</td>
+            </tr>
+            <tr>
+                <th>V_largeur</th>
+                <td>{{ autorisation_convoi_exceptionel.vLargeur }}</td>
+            </tr>
+            <tr>
+                <th>Hauteur</th>
+                <td>{{ autorisation_convoi_exceptionel.hauteur }}</td>
+            </tr>
+            <tr>
+                <th>R_securite</th>
+                <td>{{ autorisation_convoi_exceptionel.rSecurite }}</td>
+            </tr>
+            <tr>
+                <th>Heure_circulation</th>
+                <td>{{ autorisation_convoi_exceptionel.heureCirculation }}</td>
+            </tr>
+            <tr>
+                <th>P_depart</th>
+                <td>{{ autorisation_convoi_exceptionel.pDepart }}</td>
+            </tr>
+            <tr>
+                <th>P_arrivee</th>
+                <td>{{ autorisation_convoi_exceptionel.pArrivee }}</td>
+            </tr>
+            <tr>
+                <th>H_depart</th>
+                <td>{{ autorisation_convoi_exceptionel.hDepart ? autorisation_convoi_exceptionel.hDepart|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>H_arrivee</th>
+                <td>{{ autorisation_convoi_exceptionel.hArrivee ? autorisation_convoi_exceptionel.hArrivee|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Arrimage</th>
+                <td>{{ autorisation_convoi_exceptionel.arrimage ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Centrage</th>
+                <td>{{ autorisation_convoi_exceptionel.centrage ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Signalisation</th>
+                <td>{{ autorisation_convoi_exceptionel.signalisation ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Charge_technique</th>
+                <td>{{ autorisation_convoi_exceptionel.chargeTechnique }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_autorisation_convoi_exceptionel_index') }}">back to list</a>
+
+    <a href="{{ path('app_autorisation_convoi_exceptionel_edit', {'id': autorisation_convoi_exceptionel.id}) }}">edit</a>
+
+    {{ include('autorisation_convoi_exceptionel/_delete_form.html.twig') }}
+{% endblock %}

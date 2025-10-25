@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit SurveillanceChargement{% endblock %}
+
+{% block body %}
+    <h1>Edit SurveillanceChargement</h1>
+
+    {{ include('surveillance_chargement/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_surveillance_chargement_index') }}">back to list</a>
+
+    {{ include('surveillance_chargement/_delete_form.html.twig') }}
+{% endblock %}

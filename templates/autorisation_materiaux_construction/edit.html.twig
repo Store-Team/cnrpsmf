@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit AutorisationMateriauxConstruction{% endblock %}
+
+{% block body %}
+    <h1>Edit AutorisationMateriauxConstruction</h1>
+
+    {{ include('autorisation_materiaux_construction/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_autorisation_materiaux_construction_index') }}">back to list</a>
+
+    {{ include('autorisation_materiaux_construction/_delete_form.html.twig') }}
+{% endblock %}

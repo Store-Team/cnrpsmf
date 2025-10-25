@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}InspectionConvoi index{% endblock %}
+
+{% block body %}
+    <h1>InspectionConvoi index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Matricule</th>
+                <th>Lieu_emission</th>
+                <th>Date_emission</th>
+                <th>R_type</th>
+                <th>R_nationalite</th>
+                <th>R_addresse</th>
+                <th>R_telephone</th>
+                <th>V_matricule</th>
+                <th>V_marque</th>
+                <th>V_type</th>
+                <th>Type_charge</th>
+                <th>Tonnage_kg</th>
+                <th>Longueur</th>
+                <th>V_largeur</th>
+                <th>Hauteur</th>
+                <th>Arrimage</th>
+                <th>Centrage</th>
+                <th>Signalisation</th>
+                <th>P_depart</th>
+                <th>P_arrivee</th>
+                <th>H_depart</th>
+                <th>H_arrivee</th>
+                <th>Raison_arret</th>
+                <th>Observations_generales</th>
+                <th>Approuve</th>
+                <th>Inspecteur_nom</th>
+                <th>Equipe1</th>
+                <th>Equipe1_contact</th>
+                <th>Equipe2</th>
+                <th>Equipe2_contact</th>
+                <th>Equipe3</th>
+                <th>Euipe3_contact</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for inspection_convoi in inspection_convois %}
+            <tr>
+                <td>{{ inspection_convoi.id }}</td>
+                <td>{{ inspection_convoi.matricule }}</td>
+                <td>{{ inspection_convoi.lieuEmission }}</td>
+                <td>{{ inspection_convoi.dateEmission ? inspection_convoi.dateEmission|date('Y-m-d') : '' }}</td>
+                <td>{{ inspection_convoi.rType }}</td>
+                <td>{{ inspection_convoi.rNationalite }}</td>
+                <td>{{ inspection_convoi.rAddresse }}</td>
+                <td>{{ inspection_convoi.rTelephone }}</td>
+                <td>{{ inspection_convoi.vMatricule }}</td>
+                <td>{{ inspection_convoi.vMarque }}</td>
+                <td>{{ inspection_convoi.vType }}</td>
+                <td>{{ inspection_convoi.typeCharge }}</td>
+                <td>{{ inspection_convoi.tonnageKg }}</td>
+                <td>{{ inspection_convoi.longueur }}</td>
+                <td>{{ inspection_convoi.vLargeur }}</td>
+                <td>{{ inspection_convoi.hauteur }}</td>
+                <td>{{ inspection_convoi.arrimage ? 'Yes' : 'No' }}</td>
+                <td>{{ inspection_convoi.centrage ? 'Yes' : 'No' }}</td>
+                <td>{{ inspection_convoi.signalisation ? 'Yes' : 'No' }}</td>
+                <td>{{ inspection_convoi.pDepart }}</td>
+                <td>{{ inspection_convoi.pArrivee }}</td>
+                <td>{{ inspection_convoi.hDepart ? inspection_convoi.hDepart|date('H:i:s') : '' }}</td>
+                <td>{{ inspection_convoi.hArrivee ? inspection_convoi.hArrivee|date('H:i:s') : '' }}</td>
+                <td>{{ inspection_convoi.raisonArret }}</td>
+                <td>{{ inspection_convoi.observationsGenerales }}</td>
+                <td>{{ inspection_convoi.approuve ? 'Yes' : 'No' }}</td>
+                <td>{{ inspection_convoi.inspecteurNom }}</td>
+                <td>{{ inspection_convoi.equipe1 }}</td>
+                <td>{{ inspection_convoi.equipe1Contact }}</td>
+                <td>{{ inspection_convoi.equipe2 }}</td>
+                <td>{{ inspection_convoi.equipe2Contact }}</td>
+                <td>{{ inspection_convoi.equipe3 }}</td>
+                <td>{{ inspection_convoi.euipe3Contact }}</td>
+                <td>
+                    <a href="{{ path('app_inspection_convoi_show', {'matricule': inspection_convoi.matricule}) }}">show</a>
+                    <a href="{{ path('app_inspection_convoi_edit', {'matricule': inspection_convoi.matricule}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="34">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_inspection_convoi_new') }}">Create new</a>
+{% endblock %}

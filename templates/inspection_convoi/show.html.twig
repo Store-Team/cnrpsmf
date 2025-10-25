@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}InspectionConvoi{% endblock %}
+
+{% block body %}
+    <h1>InspectionConvoi</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ inspection_convoi.id }}</td>
+            </tr>
+            <tr>
+                <th>Matricule</th>
+                <td>{{ inspection_convoi.matricule }}</td>
+            </tr>
+            <tr>
+                <th>Lieu_emission</th>
+                <td>{{ inspection_convoi.lieuEmission }}</td>
+            </tr>
+            <tr>
+                <th>Date_emission</th>
+                <td>{{ inspection_convoi.dateEmission ? inspection_convoi.dateEmission|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>R_type</th>
+                <td>{{ inspection_convoi.rType }}</td>
+            </tr>
+            <tr>
+                <th>R_nationalite</th>
+                <td>{{ inspection_convoi.rNationalite }}</td>
+            </tr>
+            <tr>
+                <th>R_addresse</th>
+                <td>{{ inspection_convoi.rAddresse }}</td>
+            </tr>
+            <tr>
+                <th>R_telephone</th>
+                <td>{{ inspection_convoi.rTelephone }}</td>
+            </tr>
+            <tr>
+                <th>V_matricule</th>
+                <td>{{ inspection_convoi.vMatricule }}</td>
+            </tr>
+            <tr>
+                <th>V_marque</th>
+                <td>{{ inspection_convoi.vMarque }}</td>
+            </tr>
+            <tr>
+                <th>V_type</th>
+                <td>{{ inspection_convoi.vType }}</td>
+            </tr>
+            <tr>
+                <th>Type_charge</th>
+                <td>{{ inspection_convoi.typeCharge }}</td>
+            </tr>
+            <tr>
+                <th>Tonnage_kg</th>
+                <td>{{ inspection_convoi.tonnageKg }}</td>
+            </tr>
+            <tr>
+                <th>Longueur</th>
+                <td>{{ inspection_convoi.longueur }}</td>
+            </tr>
+            <tr>
+                <th>V_largeur</th>
+                <td>{{ inspection_convoi.vLargeur }}</td>
+            </tr>
+            <tr>
+                <th>Hauteur</th>
+                <td>{{ inspection_convoi.hauteur }}</td>
+            </tr>
+            <tr>
+                <th>Arrimage</th>
+                <td>{{ inspection_convoi.arrimage ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Centrage</th>
+                <td>{{ inspection_convoi.centrage ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Signalisation</th>
+                <td>{{ inspection_convoi.signalisation ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>P_depart</th>
+                <td>{{ inspection_convoi.pDepart }}</td>
+            </tr>
+            <tr>
+                <th>P_arrivee</th>
+                <td>{{ inspection_convoi.pArrivee }}</td>
+            </tr>
+            <tr>
+                <th>H_depart</th>
+                <td>{{ inspection_convoi.hDepart ? inspection_convoi.hDepart|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>H_arrivee</th>
+                <td>{{ inspection_convoi.hArrivee ? inspection_convoi.hArrivee|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Raison_arret</th>
+                <td>{{ inspection_convoi.raisonArret }}</td>
+            </tr>
+            <tr>
+                <th>Observations_generales</th>
+                <td>{{ inspection_convoi.observationsGenerales }}</td>
+            </tr>
+            <tr>
+                <th>Approuve</th>
+                <td>{{ inspection_convoi.approuve ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Inspecteur_nom</th>
+                <td>{{ inspection_convoi.inspecteurNom }}</td>
+            </tr>
+            <tr>
+                <th>Equipe1</th>
+                <td>{{ inspection_convoi.equipe1 }}</td>
+            </tr>
+            <tr>
+                <th>Equipe1_contact</th>
+                <td>{{ inspection_convoi.equipe1Contact }}</td>
+            </tr>
+            <tr>
+                <th>Equipe2</th>
+                <td>{{ inspection_convoi.equipe2 }}</td>
+            </tr>
+            <tr>
+                <th>Equipe2_contact</th>
+                <td>{{ inspection_convoi.equipe2Contact }}</td>
+            </tr>
+            <tr>
+                <th>Equipe3</th>
+                <td>{{ inspection_convoi.equipe3 }}</td>
+            </tr>
+            <tr>
+                <th>Euipe3_contact</th>
+                <td>{{ inspection_convoi.euipe3Contact }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_inspection_convoi_index') }}">back to list</a>
+
+    <a href="{{ path('app_inspection_convoi_edit', {'matricule': inspection_convoi.matricule}) }}">edit</a>
+
+    {{ include('inspection_convoi/_delete_form.html.twig') }}
+{% endblock %}

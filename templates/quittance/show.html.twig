@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quittance{% endblock %}
+
+{% block body %}
+    <h1>Quittance</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ quittance.id }}</td>
+            </tr>
+            <tr>
+                <th>Matricule</th>
+                <td>{{ quittance.matricule }}</td>
+            </tr>
+            <tr>
+                <th>Type_quittance</th>
+                <td>{{ quittance.typeQuittance }}</td>
+            </tr>
+            <tr>
+                <th>Lieu_emission</th>
+                <td>{{ quittance.lieuEmission }}</td>
+            </tr>
+            <tr>
+                <th>Date_emmision</th>
+                <td>{{ quittance.dateEmmision ? quittance.dateEmmision|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Assujettif</th>
+                <td>{{ quittance.assujettif }}</td>
+            </tr>
+            <tr>
+                <th>Numero_perception</th>
+                <td>{{ quittance.numeroPerception }}</td>
+            </tr>
+            <tr>
+                <th>Montant_chiffres</th>
+                <td>{{ quittance.montantChiffres }}</td>
+            </tr>
+            <tr>
+                <th>Montant</th>
+                <td>{{ quittance.montant }}</td>
+            </tr>
+            <tr>
+                <th>Banque</th>
+                <td>{{ quittance.banque }}</td>
+            </tr>
+            <tr>
+                <th>Numero_compte</th>
+                <td>{{ quittance.numeroCompte }}</td>
+            </tr>
+            <tr>
+                <th>Mode_payement</th>
+                <td>{{ quittance.modePayement }}</td>
+            </tr>
+            <tr>
+                <th>Nature_impo</th>
+                <td>{{ quittance.natureImpo }}</td>
+            </tr>
+            <tr>
+                <th>Receveur_drlu</th>
+                <td>{{ quittance.receveurDrlu }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_quittance_index') }}">back to list</a>
+
+    <a href="{{ path('app_quittance_edit', {'matricule': quittance.matricule}) }}">edit</a>
+
+    {{ include('quittance/_delete_form.html.twig') }}
+{% endblock %}

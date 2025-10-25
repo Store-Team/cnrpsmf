@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AutorisationMateriauxConstruction index{% endblock %}
+
+{% block body %}
+    <h1>AutorisationMateriauxConstruction index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Matricule</th>
+                <th>Lieu_emission</th>
+                <th>Date_emission</th>
+                <th>R_type</th>
+                <th>R_nationalite</th>
+                <th>R_addresse</th>
+                <th>R_telephone</th>
+                <th>V_matricule</th>
+                <th>V_marque</th>
+                <th>V_type</th>
+                <th>Type_charge</th>
+                <th>Tonnage_kg</th>
+                <th>R_securite</th>
+                <th>Heure_circulation</th>
+                <th>P_depart</th>
+                <th>P_arrivee</th>
+                <th>H_depart</th>
+                <th>H_arrivee</th>
+                <th>Arrimage</th>
+                <th>Centrage</th>
+                <th>Signalisation</th>
+                <th>Charge_technique</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for autorisation_materiaux_construction in autorisation_materiaux_constructions %}
+            <tr>
+                <td>{{ autorisation_materiaux_construction.id }}</td>
+                <td>{{ autorisation_materiaux_construction.matricule }}</td>
+                <td>{{ autorisation_materiaux_construction.lieuEmission }}</td>
+                <td>{{ autorisation_materiaux_construction.dateEmission ? autorisation_materiaux_construction.dateEmission|date('Y-m-d') : '' }}</td>
+                <td>{{ autorisation_materiaux_construction.rType }}</td>
+                <td>{{ autorisation_materiaux_construction.rNationalite }}</td>
+                <td>{{ autorisation_materiaux_construction.rAddresse }}</td>
+                <td>{{ autorisation_materiaux_construction.rTelephone }}</td>
+                <td>{{ autorisation_materiaux_construction.vMatricule }}</td>
+                <td>{{ autorisation_materiaux_construction.vMarque }}</td>
+                <td>{{ autorisation_materiaux_construction.vType }}</td>
+                <td>{{ autorisation_materiaux_construction.typeCharge }}</td>
+                <td>{{ autorisation_materiaux_construction.tonnageKg }}</td>
+                <td>{{ autorisation_materiaux_construction.rSecurite }}</td>
+                <td>{{ autorisation_materiaux_construction.heureCirculation }}</td>
+                <td>{{ autorisation_materiaux_construction.pDepart }}</td>
+                <td>{{ autorisation_materiaux_construction.pArrivee }}</td>
+                <td>{{ autorisation_materiaux_construction.hDepart ? autorisation_materiaux_construction.hDepart|date('H:i:s') : '' }}</td>
+                <td>{{ autorisation_materiaux_construction.hArrivee ? autorisation_materiaux_construction.hArrivee|date('H:i:s') : '' }}</td>
+                <td>{{ autorisation_materiaux_construction.arrimage ? 'Yes' : 'No' }}</td>
+                <td>{{ autorisation_materiaux_construction.centrage ? 'Yes' : 'No' }}</td>
+                <td>{{ autorisation_materiaux_construction.signalisation ? 'Yes' : 'No' }}</td>
+                <td>{{ autorisation_materiaux_construction.chargeTechnique }}</td>
+                <td>
+                    <a href="{{ path('app_autorisation_materiaux_construction_show', {'matricule': autorisation_materiaux_construction.matricule}) }}">show</a>
+                    <a href="{{ path('app_autorisation_materiaux_construction_edit', {'matricule': autorisation_materiaux_construction.matricule}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="24">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_autorisation_materiaux_construction_new') }}">Create new</a>
+{% endblock %}

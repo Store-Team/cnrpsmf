@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New SurveillanceTaxiMoto{% endblock %}
+
+{% block body %}
+    <h1>Create new SurveillanceTaxiMoto</h1>
+
+    {{ include('surveillance_taxi_moto/_form.html.twig') }}
+
+    <a href="{{ path('app_surveillance_taxi_moto_index') }}">back to list</a>
+{% endblock %}
