@@ -16,7 +16,7 @@ class SurveillanceChargement
     #[Groups('api_surveillance_chargement')]
     private ?int $id = null;
     
-    #[ORM\Column(type: Types::BIGINT, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     #[Groups('api_surveillance_chargement')]
     private ?string $matricule = null;
 

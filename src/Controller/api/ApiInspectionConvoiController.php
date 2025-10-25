@@ -73,7 +73,7 @@ final class ApiInspectionConvoiController extends AbstractController
                             new OA\Property(property: 'equipe2', type: 'string', description: 'Membre équipe 2', example: 'Fotso Marie'),
                             new OA\Property(property: 'equipe2_contact', type: 'string', description: 'Contact équipe 2', example: '+237655123789'),
                             new OA\Property(property: 'equipe3', type: 'string', description: 'Membre équipe 3', example: 'Biya Samuel'),
-                            new OA\Property(property: 'euipe3_contact', type: 'string', description: 'Contact équipe 3', example: '+237692456123')
+                            new OA\Property(property: 'equipe3_contact', type: 'string', description: 'Contact équipe 3', example: '+237692456123')
                         ]
                     )
                 )

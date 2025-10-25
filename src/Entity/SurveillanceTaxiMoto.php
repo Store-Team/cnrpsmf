@@ -16,7 +16,7 @@ class SurveillanceTaxiMoto
     #[Groups(['api_surveillance_taxi_moto'])]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::BIGINT, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     #[Groups(['api_surveillance_taxi_moto'])]
     private ?string $matricule = null;
 

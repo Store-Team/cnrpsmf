@@ -17,7 +17,7 @@ class Quittance
     #[Groups('api_quittance')]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::BIGINT, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     #[Groups('api_quittance')]
     private ?string $matricule = null;
 

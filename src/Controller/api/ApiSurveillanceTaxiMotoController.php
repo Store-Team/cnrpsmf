@@ -45,20 +45,19 @@ final class ApiSurveillanceTaxiMotoController extends AbstractController
                     items: new OA\Items(
                         type: 'object',
                         properties: [
-                            new OA\Property(property: 'id', type: 'integer', example: 1),
-                            new OA\Property(property: 'numero_autorisation', type: 'string', example: 'TM-2024-001'),
-                            new OA\Property(property: 'lieu_emission', type: 'string', example: 'Douala'),
-                            new OA\Property(property: 'date_emission', type: 'string', format: 'date', example: '2024-01-15'),
-                            new OA\Property(property: 'conducteur_nom', type: 'string', example: 'MBALLA Paul'),
-                            new OA\Property(property: 'conducteur_permis', type: 'string', example: 'P12345678'),
-                            new OA\Property(property: 'vehicule_matricule', type: 'string', example: 'DLA-123-AB'),
-                            new OA\Property(property: 'vehicule_marque', type: 'string', example: 'YAMAHA'),
-                            new OA\Property(property: 'vehicule_couleur', type: 'string', example: 'Rouge'),
-                            new OA\Property(property: 'heure_debut', type: 'string', format: 'time', example: '08:00:00'),
-                            new OA\Property(property: 'heure_fin', type: 'string', format: 'time', example: '18:00:00'),
-                            new OA\Property(property: 'zone_operation', type: 'string', example: 'Centre-ville'),
-                            new OA\Property(property: 'observations', type: 'string', example: 'RAS'),
-                            new OA\Property(property: 'approuve', type: 'boolean', example: true)
+                            new OA\Property(property: 'id', type: 'integer', description: 'ID unique', example: 1),
+                            new OA\Property(property: 'matricule', type: 'string', description: 'Numéro de matricule', example: 'TM-2024-001'),
+                            new OA\Property(property: 'numero_recu', type: 'string', description: 'Numéro de reçu', example: 'RC-001-2024'),
+                            new OA\Property(property: 'lieu_emission', type: 'string', description: 'Lieu d\'émission', example: 'Douala'),
+                            new OA\Property(property: 'date_emission', type: 'string', format: 'date', description: 'Date d\'émission', example: '2024-01-15'),
+                            new OA\Property(property: 'nom_dem', type: 'string', description: 'Nom du demandeur', example: 'MBALLA Paul'),
+                            new OA\Property(property: 'corporation', type: 'string', description: 'Corporation/Syndicat', example: 'Syndicat des Taxis Douala'),
+                            new OA\Property(property: 'telephone_dem', type: 'string', description: 'Téléphone du demandeur', example: '+237699123456'),
+                            new OA\Property(property: 'm_matricule', type: 'string', description: 'Matricule du véhicule/moto', example: 'DLA-123-AB'),
+                            new OA\Property(property: 'marque_moto', type: 'string', description: 'Marque de la moto', example: 'YAMAHA CBR 150'),
+                            new OA\Property(property: 'inspecteur1', type: 'string', description: 'Premier inspecteur', example: 'Inspecteur FOUDA'),
+                            new OA\Property(property: 'inspecteur2', type: 'string', description: 'Deuxième inspecteur', example: 'Inspecteur BIYA'),
+                            new OA\Property(property: 'inspecteur3', type: 'string', description: 'Troisième inspecteur', example: 'Inspecteur FOE')
                         ]
                     )
                 )
@@ -68,19 +67,33 @@ final class ApiSurveillanceTaxiMotoController extends AbstractController
                 'data' => [
                     [
                         'id' => 1,
-                        'numero_autorisation' => 'TM-2024-001',
+                        'matricule' => 'TM-2024-001',
+                        'numero_recu' => 'RC-001-2024',
                         'lieu_emission' => 'Douala',
                         'date_emission' => '2024-01-15',
-                        'conducteur_nom' => 'MBALLA Paul',
-                        'conducteur_permis' => 'P12345678',
-                        'vehicule_matricule' => 'DLA-123-AB',
-                        'vehicule_marque' => 'YAMAHA',
-                        'vehicule_couleur' => 'Rouge',
-                        'heure_debut' => '08:00:00',
-                        'heure_fin' => '18:00:00',
-                        'zone_operation' => 'Centre-ville',
-                        'observations' => 'RAS',
-                        'approuve' => true
+                        'nom_dem' => 'MBALLA Paul',
+                        'corporation' => 'Syndicat des Taxis Douala',
+                        'telephone_dem' => '+237699123456',
+                        'm_matricule' => 'DLA-123-AB',
+                        'marque_moto' => 'YAMAHA CBR 150',
+                        'inspecteur1' => 'Inspecteur FOUDA',
+                        'inspecteur2' => 'Inspecteur BIYA',
+                        'inspecteur3' => 'Inspecteur FOE'
+                    ],
+                    [
+                        'id' => 2,
+                        'matricule' => 'TM-2024-002',
+                        'numero_recu' => 'RC-002-2024',
+                        'lieu_emission' => 'Yaoundé',
+                        'date_emission' => '2024-01-16',
+                        'nom_dem' => 'NKOMO Jean',
+                        'corporation' => 'Union des Mototaxis Yaoundé',
+                        'telephone_dem' => '+237677654321',
+                        'm_matricule' => 'YDE-456-CD',
+                        'marque_moto' => 'HONDA XR 125',
+                        'inspecteur1' => 'Inspecteur ETEME',
+                        'inspecteur2' => 'Inspecteur MANGA',
+                        'inspecteur3' => 'Inspecteur ATEBA'
                     ]
                 ]
             ]
@@ -123,40 +136,34 @@ final class ApiSurveillanceTaxiMotoController extends AbstractController
         content: new OA\JsonContent(
             type: 'object',
             description: 'Données de la surveillance à créer',
-            required: ['numero_autorisation', 'lieu_emission', 'date_emission', 'conducteur_nom', 'vehicule_matricule'],
+            required: ['matricule', 'numero_recu', 'lieu_emission', 'date_emission', 'nom_dem', 'corporation', 'telephone_dem', 'm_matricule', 'marque_moto', 'inspecteur1', 'inspecteur2', 'inspecteur3'],
             properties: [
-                new OA\Property(property: 'numero_autorisation', type: 'string', example: 'TM-2024-002', description: 'Numéro unique d\'autorisation'),
-                new OA\Property(property: 'lieu_emission', type: 'string', example: 'Yaoundé', description: 'Lieu d\'émission de l\'autorisation'),
+                new OA\Property(property: 'matricule', type: 'string', example: 'TM-2024-002', description: 'Numéro de matricule unique'),
+                new OA\Property(property: 'numero_recu', type: 'string', example: 'RC-002-2024', description: 'Numéro de reçu'),
+                new OA\Property(property: 'lieu_emission', type: 'string', example: 'Yaoundé', description: 'Lieu d\'émission'),
                 new OA\Property(property: 'date_emission', type: 'string', format: 'date', example: '2024-01-20', description: 'Date d\'émission'),
-                new OA\Property(property: 'conducteur_nom', type: 'string', example: 'NKOMO Jean', description: 'Nom complet du conducteur'),
-                new OA\Property(property: 'conducteur_permis', type: 'string', example: 'P87654321', description: 'Numéro de permis'),
-                new OA\Property(property: 'conducteur_telephone', type: 'string', example: '+237 6XX XX XX XX', description: 'Téléphone du conducteur'),
-                new OA\Property(property: 'vehicule_matricule', type: 'string', example: 'YDE-456-CD', description: 'Plaque d\'immatriculation'),
-                new OA\Property(property: 'vehicule_marque', type: 'string', example: 'HONDA', description: 'Marque du véhicule'),
-                new OA\Property(property: 'vehicule_modele', type: 'string', example: 'CBR 125', description: 'Modèle du véhicule'),
-                new OA\Property(property: 'vehicule_couleur', type: 'string', example: 'Bleu', description: 'Couleur principale'),
-                new OA\Property(property: 'heure_debut', type: 'string', format: 'time', example: '06:00:00', description: 'Heure de début d\'activité'),
-                new OA\Property(property: 'heure_fin', type: 'string', format: 'time', example: '20:00:00', description: 'Heure de fin d\'activité'),
-                new OA\Property(property: 'zone_operation', type: 'string', example: 'Quartier Mvog-Mbi', description: 'Zone d\'opération autorisée'),
-                new OA\Property(property: 'observations', type: 'string', example: 'Véhicule en bon état', description: 'Observations particulières'),
-                new OA\Property(property: 'approuve', type: 'boolean', example: false, description: 'Statut d\'approbation')
+                new OA\Property(property: 'nom_dem', type: 'string', example: 'NKOMO Jean', description: 'Nom du demandeur'),
+                new OA\Property(property: 'corporation', type: 'string', example: 'Union des Mototaxis Yaoundé', description: 'Corporation/Syndicat'),
+                new OA\Property(property: 'telephone_dem', type: 'string', example: '+237677654321', description: 'Téléphone du demandeur'),
+                new OA\Property(property: 'm_matricule', type: 'string', example: 'YDE-456-CD', description: 'Matricule du véhicule/moto'),
+                new OA\Property(property: 'marque_moto', type: 'string', example: 'HONDA XR 125', description: 'Marque et modèle de la moto'),
+                new OA\Property(property: 'inspecteur1', type: 'string', example: 'Inspecteur ETEME', description: 'Premier inspecteur'),
+                new OA\Property(property: 'inspecteur2', type: 'string', example: 'Inspecteur MANGA', description: 'Deuxième inspecteur'),
+                new OA\Property(property: 'inspecteur3', type: 'string', example: 'Inspecteur ATEBA', description: 'Troisième inspecteur')
             ],
             example: [
-                'numero_autorisation' => 'TM-2024-002',
+                'matricule' => 'TM-2024-002',
+                'numero_recu' => 'RC-002-2024',
                 'lieu_emission' => 'Yaoundé',
                 'date_emission' => '2024-01-20',
-                'conducteur_nom' => 'NKOMO Jean',
-                'conducteur_permis' => 'P87654321',
-                'conducteur_telephone' => '+237 6XX XX XX XX',
-                'vehicule_matricule' => 'YDE-456-CD',
-                'vehicule_marque' => 'HONDA',
-                'vehicule_modele' => 'CBR 125',
-                'vehicule_couleur' => 'Bleu',
-                'heure_debut' => '06:00:00',
-                'heure_fin' => '20:00:00',
-                'zone_operation' => 'Quartier Mvog-Mbi',
-                'observations' => 'Véhicule en bon état',
-                'approuve' => false
+                'nom_dem' => 'NKOMO Jean',
+                'corporation' => 'Union des Mototaxis Yaoundé',
+                'telephone_dem' => '+237677654321',
+                'm_matricule' => 'YDE-456-CD',
+                'marque_moto' => 'HONDA XR 125',
+                'inspecteur1' => 'Inspecteur ETEME',
+                'inspecteur2' => 'Inspecteur MANGA',
+                'inspecteur3' => 'Inspecteur ATEBA'
             ]
         )
         ),
@@ -277,21 +284,18 @@ final class ApiSurveillanceTaxiMotoController extends AbstractController
                     type: 'object',
                     properties: [
                         new OA\Property(property: 'id', type: 'integer', example: 1),
-                        new OA\Property(property: 'numero_autorisation', type: 'string', example: 'TM-2024-001'),
+                        new OA\Property(property: 'matricule', type: 'string', example: 'TM-2024-001'),
+                        new OA\Property(property: 'numero_recu', type: 'string', example: 'RC-001-2024'),
                         new OA\Property(property: 'lieu_emission', type: 'string', example: 'Douala'),
                         new OA\Property(property: 'date_emission', type: 'string', format: 'date', example: '2024-01-15'),
-                        new OA\Property(property: 'conducteur_nom', type: 'string', example: 'MBALLA Paul'),
-                        new OA\Property(property: 'conducteur_permis', type: 'string', example: 'P12345678'),
-                        new OA\Property(property: 'conducteur_telephone', type: 'string', example: '+237 6XX XX XX XX'),
-                        new OA\Property(property: 'vehicule_matricule', type: 'string', example: 'DLA-123-AB'),
-                        new OA\Property(property: 'vehicule_marque', type: 'string', example: 'YAMAHA'),
-                        new OA\Property(property: 'vehicule_modele', type: 'string', example: 'MT-125'),
-                        new OA\Property(property: 'vehicule_couleur', type: 'string', example: 'Rouge'),
-                        new OA\Property(property: 'heure_debut', type: 'string', format: 'time', example: '08:00:00'),
-                        new OA\Property(property: 'heure_fin', type: 'string', format: 'time', example: '18:00:00'),
-                        new OA\Property(property: 'zone_operation', type: 'string', example: 'Centre-ville'),
-                        new OA\Property(property: 'observations', type: 'string', example: 'RAS'),
-                        new OA\Property(property: 'approuve', type: 'boolean', example: true)
+                        new OA\Property(property: 'nom_dem', type: 'string', example: 'MBALLA Paul'),
+                        new OA\Property(property: 'corporation', type: 'string', example: 'Syndicat des Taxis Douala'),
+                        new OA\Property(property: 'telephone_dem', type: 'string', example: '+237699123456'),
+                        new OA\Property(property: 'm_matricule', type: 'string', example: 'DLA-123-AB'),
+                        new OA\Property(property: 'marque_moto', type: 'string', example: 'YAMAHA CBR 150'),
+                        new OA\Property(property: 'inspecteur1', type: 'string', example: 'Inspecteur FOUDA'),
+                        new OA\Property(property: 'inspecteur2', type: 'string', example: 'Inspecteur BIYA'),
+                        new OA\Property(property: 'inspecteur3', type: 'string', example: 'Inspecteur FOE')
                     ]
                 )
             ],
@@ -299,21 +303,18 @@ final class ApiSurveillanceTaxiMotoController extends AbstractController
                 'success' => true,
                 'data' => [
                     'id' => 1,
-                    'numero_autorisation' => 'TM-2024-001',
+                    'matricule' => 'TM-2024-001',
+                    'numero_recu' => 'RC-001-2024',
                     'lieu_emission' => 'Douala',
                     'date_emission' => '2024-01-15',
-                    'conducteur_nom' => 'MBALLA Paul',
-                    'conducteur_permis' => 'P12345678',
-                    'conducteur_telephone' => '+237 6XX XX XX XX',
-                    'vehicule_matricule' => 'DLA-123-AB',
-                    'vehicule_marque' => 'YAMAHA',
-                    'vehicule_modele' => 'MT-125',
-                    'vehicule_couleur' => 'Rouge',
-                    'heure_debut' => '08:00:00',
-                    'heure_fin' => '18:00:00',
-                    'zone_operation' => 'Centre-ville',
-                    'observations' => 'RAS',
-                    'approuve' => true
+                    'nom_dem' => 'MBALLA Paul',
+                    'corporation' => 'Syndicat des Taxis Douala',
+                    'telephone_dem' => '+237699123456',
+                    'm_matricule' => 'DLA-123-AB',
+                    'marque_moto' => 'YAMAHA CBR 150',
+                    'inspecteur1' => 'Inspecteur FOUDA',
+                    'inspecteur2' => 'Inspecteur BIYA',
+                    'inspecteur3' => 'Inspecteur FOE'
                 ]
             ]
         )
@@ -415,9 +416,18 @@ final class ApiSurveillanceTaxiMotoController extends AbstractController
                 'message' => 'Surveillance Taxi Moto mise à jour avec succès',
                 'data' => [
                     'id' => 1,
-                    'numero_autorisation' => 'TM-2024-001',
-                    'zone_operation' => 'Quartier Bonamoussadi',
-                    'approuve' => true
+                    'matricule' => 'TM-2024-001',
+                    'numero_recu' => 'RC-001-2024',
+                    'lieu_emission' => 'Douala',
+                    'date_emission' => '2024-01-15',
+                    'nom_dem' => 'MBALLA Paul (modifié)',
+                    'corporation' => 'Syndicat des Taxis Douala',
+                    'telephone_dem' => '+237699123456',
+                    'm_matricule' => 'DLA-123-AB',
+                    'marque_moto' => 'YAMAHA CBR 150',
+                    'inspecteur1' => 'Inspecteur FOUDA',
+                    'inspecteur2' => 'Inspecteur BIYA',
+                    'inspecteur3' => 'Inspecteur FOE'
                 ]
             ]
         )

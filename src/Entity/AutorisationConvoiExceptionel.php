@@ -16,7 +16,7 @@ class AutorisationConvoiExceptionel
     #[Groups('api_autorisation_convoi')]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::BIGINT, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     #[Groups('api_autorisation_convoi')]
     private ?string $matricule = null;
 
