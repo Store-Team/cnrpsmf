@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AutorisationConvoiExceptionelRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: AutorisationConvoiExceptionelRepository::class)]
 class AutorisationConvoiExceptionel
@@ -12,81 +13,107 @@ class AutorisationConvoiExceptionel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api_autorisation_convoi')]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
+    #[ORM\Column(type: Types::BIGINT, unique: true)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $matricule = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $lieu_emission = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups('api_autorisation_convoi')]
     private ?\DateTime $date_emission = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $r_type = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $r_nationalite = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $r_addresse = null;
 
     #[ORM\Column(length: 13)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $r_telephone = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $v_matricule = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $v_marque = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $v_type = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $type_charge = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $tonnage_kg = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $longueur = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $v_largeur = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $hauteur = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $r_securite = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $heure_circulation = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $p_depart = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $p_arrivee = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups('api_autorisation_convoi')]
     private ?\DateTime $h_depart = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups('api_autorisation_convoi')]
     private ?\DateTime $h_arrivee = null;
 
     #[ORM\Column]
+    #[Groups('api_autorisation_convoi')]
     private ?bool $arrimage = null;
 
     #[ORM\Column]
+    #[Groups('api_autorisation_convoi')]
     private ?bool $centrage = null;
 
     #[ORM\Column]
+    #[Groups('api_autorisation_convoi')]
     private ?bool $signalisation = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('api_autorisation_convoi')]
     private ?string $charge_technique = null;
 
     public function getId(): ?int

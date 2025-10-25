@@ -5,80 +5,104 @@ namespace App\Entity;
 use App\Repository\AutorisationMateriauxConstructionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AutorisationMateriauxConstructionRepository::class)]
 class AutorisationMateriauxConstruction
 {
+    #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?int $id = null;
 
-    #[ORM\Id]
-    #[ORM\Column(type: Types::BIGINT)]
+    #[ORM\Column(type: Types::BIGINT, unique: true)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $matricule = null;
 
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $lieu_emission = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?\DateTime $date_emission = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $r_type = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $r_nationalite = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $r_addresse = null;
 
     #[ORM\Column(length: 13)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $r_telephone = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $v_matricule = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $v_marque = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $v_type = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $type_charge = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $tonnage_kg = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $r_securite = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $heure_circulation = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $p_depart = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $p_arrivee = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?\DateTime $h_depart = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?\DateTime $h_arrivee = null;
 
     #[ORM\Column]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?bool $arrimage = null;
 
     #[ORM\Column]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?bool $centrage = null;
 
     #[ORM\Column]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?bool $signalisation = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_autorisation_materiaux'])]
     private ?string $charge_technique = null;
 
 
@@ -91,6 +115,13 @@ class AutorisationMateriauxConstruction
     public function getMatricule(): ?string
     {
         return $this->matricule;
+    }
+
+    public function setMatricule(string $matricule): static
+    {
+        $this->matricule = $matricule;
+
+        return $this;
     }
 
     public function getLieuEmission(): ?string

@@ -10,13 +10,13 @@ use symfony\component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: InspectionConvoiRepository::class)]
 class InspectionConvoi
 {
+    #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups('api_inspectionconvoi')]
     private ?int $id = null;
 
-    #[ORM\Id]
-    #[ORM\Column(type: Types::BIGINT)]
+    #[ORM\Column(type: Types::BIGINT, unique: true)]
     #[Groups('api_inspectionconvoi')]
     private ?string $matricule = null;
 
@@ -153,6 +153,13 @@ class InspectionConvoi
     public function getMatricule(): ?string
     {
         return $this->matricule;
+    }
+
+    public function setMatricule(string $matricule): static
+    {
+        $this->matricule = $matricule;
+
+        return $this;
     }
 
     public function getLieuEmission(): ?string

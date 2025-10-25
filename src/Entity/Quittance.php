@@ -11,13 +11,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: QuittanceRepository::class)]
 class Quittance
 {
+    #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups('api_quittance')]
     private ?int $id = null;
 
-    #[ORM\Id]
-    #[ORM\Column(type: Types::BIGINT)]
+    #[ORM\Column(type: Types::BIGINT, unique: true)]
     #[Groups('api_quittance')]
     private ?string $matricule = null;
 
