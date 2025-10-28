@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SurveillanceTaxiMotoRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -30,7 +31,7 @@ class SurveillanceTaxiMoto
 
     #[Groups(['api_surveillance_taxi_moto'])]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $date_emission = null;
+    private ?DateTime $date_emission = null;
 
     #[Groups(['api_surveillance_taxi_moto'])]
     #[ORM\Column(length: 255)]
@@ -105,12 +106,12 @@ class SurveillanceTaxiMoto
         return $this;
     }
 
-    public function getDateEmission(): ?\DateTime
+    public function getDateEmission(): ?DateTime
     {
         return $this->date_emission;
     }
 
-    public function setDateEmission(\DateTime $date_emission): static
+    public function setDateEmission(DateTime $date_emission): static
     {
         $this->date_emission = $date_emission;
 

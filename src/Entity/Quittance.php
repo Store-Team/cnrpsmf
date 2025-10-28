@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\QuittanceRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -31,7 +32,7 @@ class Quittance
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups('api_quittance')]
-    private ?\DateTime $date_emmision = null;
+    private ?DateTime $date_emmision = null;
 
     #[ORM\Column(length: 255)]
     #[Groups('api_quittance')]
@@ -110,12 +111,12 @@ class Quittance
         return $this;
     }
 
-    public function getDateEmmision(): ?\DateTime
+    public function getDateEmmision(): ?DateTime
     {
         return $this->date_emmision;
     }
 
-    public function setDateEmmision(\DateTime $date_emmision): static
+    public function setDateEmmision(DateTime $date_emmision): static
     {
         $this->date_emmision = $date_emmision;
 

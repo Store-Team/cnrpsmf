@@ -2,12 +2,15 @@
 
 namespace App\Controller\api;
 
+use App\Entity\AutaurisationConvoiExceptionnel;
+use App\Entity\AutorisationCirculationConstruction;
 use App\Entity\AutorisationConvoiExceptionel;
 use App\Entity\AutorisationMateriauxConstruction;
 use App\Entity\InspectionConvoi;
 use App\Entity\Quittance;
 use App\Entity\SurveillanceChargement;
 use App\Entity\SurveillanceTaxiMoto;
+use App\Entity\SurveillanceTechnique;
 use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,67 +29,64 @@ final class EndPointPostController extends AbstractController
     #[OA\Post(
         path: "/api/autorisation-convoi",
         summary: "Créer une autorisation de convoi exceptionnel",
-        description: "Permet d’enregistrer une autorisation de convoi exceptionnel, incluant toutes les informations sur le responsable, le véhicule, la charge, et le trajet.
-Cette API est utilisée par les services de transport, les BTP, et les autorités pour le suivi et le contrôle des convois spéciaux.",
+        description: "Permet d’enregistrer une autorisation de convoi exceptionnel avec toutes les informations du requérant, du véhicule, de la charge et du trajet.",
         tags: ["Autorisation Convoi"],
         requestBody: new OA\RequestBody(
             required: true,
-            description: "Données complètes de l’autorisation de convoi exceptionnel",
+            description: "Toutes les données nécessaires pour l’autorisation de convoi exceptionnel.",
             content: new OA\JsonContent(
                 type: "object",
                 required: [
-                    "matricule",
-                    "lieu_emission",
-                    "date_emission",
-                    "r_type",
-                    "r_nationalite",
-                    "r_addresse",
-                    "r_telephone",
-                    "v_matricule",
-                    "v_marque",
-                    "v_type",
-                    "type_charge",
-                    "tonnage_kg",
+                    "requerant",
+                    "nationalite",
+                    "typeDePersonne",
+                    "coordonnee",
+                    "telephone",
+                    "immatriculation",
+                    "marque",
+                    "typeDeVihicule",
+                    "typeDeCharge",
+                    "tonnage",
+                    "categorie",
                     "longueur",
-                    "v_largeur",
+                    "largueur",
                     "hauteur",
-                    "r_securite",
-                    "heure_circulation",
-                    "p_depart",
-                    "p_arrivee",
-                    "h_depart",
-                    "h_arrivee",
+                    "conditionDeSecurite",
+                    "heureDeCirculation",
+                    "pointDeDepart",
+                    "pointArrive",
+                    "heureDeDepart",
+                    "heureArrivee",
+                    "lieuDEmission",
                     "arrimage",
-                    "centrage",
                     "signalisation",
-                    "charge_technique"
+                    "centrage"
                 ],
                 properties: [
-                    new OA\Property(property: "matricule", type: "string", example: "20251025001", description: "Numéro unique d’enregistrement de l’autorisation"),
-                    new OA\Property(property: "lieu_emission", type: "string", example: "Direction Générale des Transports Terrestres", description: "Service ou entité émettrice de l’autorisation"),
-                    new OA\Property(property: "date_emission", type: "string", format: "date", example: "2025-10-25", description: "Date d’émission de l’autorisation"),
-                    new OA\Property(property: "r_type", type: "string", example: "Entreprise de BTP", description: "Type ou nature du responsable de l’autorisation (entreprise, particulier, institution)"),
-                    new OA\Property(property: "r_nationalite", type: "string", example: "Camerounaise", description: "Nationalité du responsable ou de la société"),
-                    new OA\Property(property: "r_addresse", type: "string", example: "Zone Industrielle de Bassa, BP 5678 Douala", description: "Adresse complète du responsable"),
-                    new OA\Property(property: "r_telephone", type: "string", example: "+237699876543", description: "Numéro de téléphone de contact principal"),
-                    new OA\Property(property: "v_matricule", type: "string", example: "CM-2025-EX-1001", description: "Numéro de plaque du véhicule principal"),
-                    new OA\Property(property: "v_marque", type: "string", example: "MAN TGX 41.640", description: "Marque et modèle du véhicule"),
-                    new OA\Property(property: "v_type", type: "string", example: "Tracteur + remorque surbaissée", description: "Type complet du convoi ou de la configuration du véhicule"),
-                    new OA\Property(property: "type_charge", type: "string", example: "Transformateur électrique 150 kVA", description: "Description de la nature exacte de la charge transportée"),
-                    new OA\Property(property: "tonnage_kg", type: "number", format: "float", example: 85000, description: "Poids total de la charge en kilogrammes"),
-                    new OA\Property(property: "longueur", type: "number", format: "float", example: 28.5, description: "Longueur totale du convoi en mètres"),
-                    new OA\Property(property: "v_largeur", type: "number", format: "float", example: 4.2, description: "Largeur totale du convoi en mètres"),
-                    new OA\Property(property: "hauteur", type: "number", format: "float", example: 4.8, description: "Hauteur totale du convoi en mètres"),
-                    new OA\Property(property: "r_securite", type: "string", example: "Escorte gendarmerie obligatoire", description: "Dispositif de sécurité imposé au convoi (ex: escorte, gyrophare, etc.)"),
-                    new OA\Property(property: "heure_circulation", type: "string", example: "06h00-18h00 uniquement", description: "Plage horaire autorisée pour la circulation"),
-                    new OA\Property(property: "p_depart", type: "string", example: "Usine ALUCAM Edéa", description: "Lieu exact de départ du convoi"),
-                    new OA\Property(property: "p_arrivee", type: "string", example: "Poste électrique ENEO Ngaoundéré", description: "Destination finale du convoi"),
-                    new OA\Property(property: "h_depart", type: "string", example: "06:00:00", description: "Heure de départ prévue (format HH:MM:SS)"),
-                    new OA\Property(property: "h_arrivee", type: "string", example: "16:30:00", description: "Heure d’arrivée prévue (format HH:MM:SS)"),
-                    new OA\Property(property: "arrimage", type: "boolean", example: true, description: "Indique si la charge est correctement arrimée"),
-                    new OA\Property(property: "centrage", type: "boolean", example: true, description: "Indique si la charge est bien centrée"),
-                    new OA\Property(property: "signalisation", type: "boolean", example: true, description: "Indique si le convoi est correctement signalé (bandes, gyrophares, panneaux)"),
-                    new OA\Property(property: "charge_technique", type: "string", example: "Équipement électrique haute tension - Manipulation spécialisée requise", description: "Détails techniques de la charge transportée")
+                    new OA\Property(property: "requerant", type: "string", example: "Société BTP Congo SARL"),
+                    new OA\Property(property: "nationalite", type: "string", example: "Congolaise"),
+                    new OA\Property(property: "typeDePersonne", type: "string", example: "Entreprise"),
+                    new OA\Property(property: "coordonnee", type: "string", example: "Zone industrielle, Limete"),
+                    new OA\Property(property: "telephone", type: "string", example: "+243810000111"),
+                    new OA\Property(property: "immatriculation", type: "string", example: "CGO-4567-AB"),
+                    new OA\Property(property: "marque", type: "string", example: "Volvo FH16"),
+                    new OA\Property(property: "typeDeVihicule", type: "string", example: "Tracteur routier"),
+                    new OA\Property(property: "typeDeCharge", type: "string", example: "Transformateur électrique"),
+                    new OA\Property(property: "tonnage", type: "string", example: "85000"),
+                    new OA\Property(property: "categorie", type: "string", example: "Convoi exceptionnel lourd"),
+                    new OA\Property(property: "longueur", type: "string", example: "28.5"),
+                    new OA\Property(property: "largueur", type: "string", example: "4.2"),
+                    new OA\Property(property: "hauteur", type: "string", example: "4.8"),
+                    new OA\Property(property: "conditionDeSecurite", type: "string", example: "Escorte gendarmerie obligatoire"),
+                    new OA\Property(property: "heureDeCirculation", type: "string", example: "06h00 - 18h00"),
+                    new OA\Property(property: "pointDeDepart", type: "string", example: "Usine Cimenterie de Figuil"),
+                    new OA\Property(property: "pointArrive", type: "string", example: "Chantier BTP Garoua"),
+                    new OA\Property(property: "heureDeDepart", type: "string", example: "06:30:00"),
+                    new OA\Property(property: "heureArrivee", type: "string", example: "16:30:00"),
+                    new OA\Property(property: "lieuDEmission", type: "string", example: "Direction régionale du Littoral"),
+                    new OA\Property(property: "arrimage", type: "string", example: "OK"),
+                    new OA\Property(property: "signalisation", type: "string", example: "Conforme"),
+                    new OA\Property(property: "centrage", type: "string", example: "Bon équilibrage")
                 ]
             )
         ),
@@ -98,64 +98,38 @@ Cette API est utilisée par les services de transport, les BTP, et les autorité
                     type: "object",
                     properties: [
                         new OA\Property(property: "message", type: "string", example: "Autorisation enregistrée avec succès."),
-                        new OA\Property(property: "id", type: "integer", example: 12)
+                        new OA\Property(property: "id", type: "integer", example: 5)
                     ]
                 )
             ),
             new OA\Response(
                 response: 400,
-                description: "Erreur de validation ou contenu JSON invalide",
+                description: "Erreur de validation",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
-                        new OA\Property(property: "message", type: "string", example: "JSON invalide"),
-                        new OA\Property(
-                            property: "errors",
-                            type: "array",
-                            items: new OA\Items(
-                                type: "object",
-                                properties: [
-                                    new OA\Property(property: "champ", type: "string", example: "r_telephone"),
-                                    new OA\Property(property: "message", type: "string", example: "Numéro de téléphone invalide.")
-                                ]
-                            )
-                        )
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 409,
-                description: "Autorisation déjà existante",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "message", type: "string", example: "Cette autorisation existe déjà.")
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 500,
-                description: "Erreur interne du serveur",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "message", type: "string", example: "Erreur interne : violation de contrainte SQL")
+                        new OA\Property(property: "message", type: "string", example: "Format JSON invalide"),
+                        new OA\Property(property: "errors", type: "array", items: new OA\Items(
+                            type: "object",
+                            properties: [
+                                new OA\Property(property: "champ", type: "string"),
+                                new OA\Property(property: "message", type: "string")
+                            ]
+                        ))
                     ]
                 )
             )
         ]
     )]
     #[Route('/api/autorisation-convoi', name: 'autorisation_convoi_create', methods: ['POST'])]
-    public function createAutorisation(
+    public function createAutorisationConvoi(
         Request $request,
         EntityManagerInterface $em,
         ValidatorInterface $validator
     ): JsonResponse {
-        // ✅ Vérifie que c’est bien du JSON
         if ($request->getContentTypeFormat() !== 'json') {
             return $this->json(['message' => 'Content-Type doit être application/json'], 400);
         }
-
 
         $data = json_decode($request->getContent(), true);
         if (!is_array($data)) {
@@ -163,220 +137,31 @@ Cette API est utilisée par les services de transport, les BTP, et les autorité
         }
 
         $constraints = new Assert\Collection([
-            'matricule' => [new Assert\NotBlank()],
-            'lieu_emission' => [new Assert\NotBlank()],
-            'date_emission' => [new Assert\NotBlank(), new Assert\Date()],
-            'r_type' => [new Assert\NotBlank()],
-            'r_nationalite' => [new Assert\NotBlank()],
-            'r_addresse' => [new Assert\NotBlank()],
-            'r_telephone' => [new Assert\NotBlank()],
-            'v_matricule' => [new Assert\NotBlank()],
-            'v_marque' => [new Assert\NotBlank()],
-            'v_type' => [new Assert\NotBlank()],
-            'type_charge' => [new Assert\NotBlank()],
-            'tonnage_kg' => [new Assert\NotBlank()],
+            'requerant' => [new Assert\NotBlank()],
+            'nationalite' => [new Assert\NotBlank()],
+            'typeDePersonne' => [new Assert\NotBlank()],
+            'coordonnee' => [new Assert\NotBlank()],
+            'telephone' => [new Assert\NotBlank(), new Assert\Regex('/^\+?[0-9]{8,15}$/')],
+            'immatriculation' => [new Assert\NotBlank()],
+            'marque' => [new Assert\NotBlank()],
+            'typeDeVihicule' => [new Assert\NotBlank()],
+            'typeDeCharge' => [new Assert\NotBlank()],
+            'tonnage' => [new Assert\NotBlank()],
+            'categorie' => [new Assert\NotBlank()],
             'longueur' => [new Assert\NotBlank()],
-            'v_largeur' => [new Assert\NotBlank()],
+            'largueur' => [new Assert\NotBlank()],
             'hauteur' => [new Assert\NotBlank()],
-            'r_securite' => [new Assert\NotBlank()],
-            'heure_circulation' => [new Assert\NotBlank()],
-            'p_depart' => [new Assert\NotBlank()],
-            'p_arrivee' => [new Assert\NotBlank()],
-            'h_depart' => [new Assert\NotBlank()],
-            'h_arrivee' => [new Assert\NotBlank()],
-            'arrimage' => [new Assert\Type('bool')],
-            'centrage' => [new Assert\Type('bool')],
-            'signalisation' => [new Assert\Type('bool')],
-            'charge_technique' => [new Assert\NotBlank()],
+            'conditionDeSecurite' => [new Assert\NotBlank()],
+            'heureDeCirculation' => [new Assert\NotBlank()],
+            'pointDeDepart' => [new Assert\NotBlank()],
+            'pointArrive' => [new Assert\NotBlank()],
+            'heureDeDepart' => [new Assert\NotBlank()],
+            'heureArrivee' => [new Assert\NotBlank()],
+            'lieuDEmission' => [new Assert\NotBlank()],
+            'arrimage' => [new Assert\NotBlank()],
+            'signalisation' => [new Assert\NotBlank()],
+            'centrage' => [new Assert\NotBlank()],
         ]);
-
-
-        $errors = $validator->validate($data, $constraints);
-        if (count($errors) > 0) {
-            $violations = [];
-            foreach ($errors as $e) {
-                $violations[] = [
-                    'champ' => $e->getPropertyPath(),
-                    'message' => $e->getMessage()
-                ];
-            }
-            return $this->json(['errors' => $violations], 400);
-        }
-
-
-        $clean = array_map(fn($v) => is_string($v) ? trim($v) : $v, $data);
-
-        $entity = (new AutorisationConvoiExceptionel())
-            ->setMatricule($clean['matricule'])
-            ->setLieuEmission($clean['lieu_emission'])
-            ->setDateEmission(new DateTime($clean['date_emission']))
-            ->setRType($clean['r_type'])
-            ->setRNationalite($clean['r_nationalite'])
-            ->setRAddresse($clean['r_addresse'])
-            ->setRTelephone($clean['r_telephone'])
-            ->setVMatricule($clean['v_matricule'])
-            ->setVMarque($clean['v_marque'])
-            ->setVType($clean['v_type'])
-            ->setTypeCharge($clean['type_charge'])
-            ->setTonnageKg($clean['tonnage_kg'])
-            ->setLongueur($clean['longueur'])
-            ->setVLargeur($clean['v_largeur'])
-            ->setHauteur($clean['hauteur'])
-            ->setRSecurite($clean['r_securite'])
-            ->setHeureCirculation($clean['heure_circulation'])
-            ->setPDepart($clean['p_depart'])
-            ->setPArrivee($clean['p_arrivee'])
-            ->setHDepart(new DateTime($clean['h_depart']))
-            ->setHArrivee(new DateTime($clean['h_arrivee']))
-            ->setArrimage($clean['arrimage'])
-            ->setCentrage($clean['centrage'])
-            ->setSignalisation($clean['signalisation'])
-            ->setChargeTechnique($clean['charge_technique']);
-
-        try {
-            $em->persist($entity);
-            $em->flush();
-        } catch (Throwable $e) {
-            return $this->json(['message' => 'Erreur interne : ' . $e->getMessage()], 500);
-        }
-
-        return $this->json([
-            'message' => 'Autorisation enregistrée avec succès',
-            'id' => $entity->getId(),
-        ], 201);
-    }
-
-    #[OA\Post(
-        path: "/api/moto-taxi-autorisation",
-        summary: "Créer une autorisation de taxi-moto",
-        description: "Permet d’enregistrer une autorisation pour un conducteur de taxi-moto, en précisant les informations d’identification,
-les données du reçu, les inspecteurs et les informations techniques de la moto.
-Les champs sont validés avant enregistrement pour garantir la conformité.",
-        tags: ["Autorisation Moto"],
-        requestBody: new OA\RequestBody(
-            required: true,
-            description: "Données nécessaires à l’enregistrement d’une autorisation de taxi-moto",
-            content: new OA\JsonContent(
-                type: "object",
-                required: [
-                    "matricule",
-                    "numero_recu",
-                    "lieu_emission",
-                    "date_emission",
-                    "nom_dem",
-                    "corporation",
-                    "telephone_dem",
-                    "m_matricule",
-                    "marque_moto",
-                    "inspecteur1",
-                    "inspecteur2",
-                    "inspecteur3"
-                ],
-                properties: [
-                    new OA\Property(property: "matricule", type: "string", example: "MOTO-2025-0008", description: "Numéro d’enregistrement unique de l’autorisation"),
-                    new OA\Property(property: "numero_recu", type: "string", example: "REC-078945", description: "Numéro de reçu de paiement officiel"),
-                    new OA\Property(property: "lieu_emission", type: "string", example: "Direction Provinciale des Transports de Kinshasa", description: "Lieu d’émission de l’autorisation"),
-                    new OA\Property(property: "date_emission", type: "string", format: "date", example: "2025-10-27", description: "Date d’émission au format YYYY-MM-DD"),
-                    new OA\Property(property: "nom_dem", type: "string", example: "Kabeya Jean-Paul", description: "Nom complet du demandeur ou propriétaire de la moto"),
-                    new OA\Property(property: "corporation", type: "string", example: "Syndicat National des Conducteurs de Taxi-Moto", description: "Nom de la corporation, syndicat ou structure affiliée"),
-                    new OA\Property(property: "telephone_dem", type: "string", example: "+243810000111", description: "Numéro de téléphone valide du demandeur"),
-                    new OA\Property(property: "m_matricule", type: "string", example: "KM-1234-XYZ", description: "Numéro de plaque de la moto"),
-                    new OA\Property(property: "marque_moto", type: "string", example: "TVS Apache 160", description: "Marque ou modèle de la moto"),
-                    new OA\Property(property: "inspecteur1", type: "string", example: "Ngoma Patrick", description: "Nom du premier inspecteur chargé du contrôle"),
-                    new OA\Property(property: "inspecteur2", type: "string", example: "Mbala Marie", description: "Nom du second inspecteur"),
-                    new OA\Property(property: "inspecteur3", type: "string", example: "Kanku David", description: "Nom du troisième inspecteur")
-                ]
-            )
-        ),
-        responses: [
-            new OA\Response(
-                response: 201,
-                description: "Autorisation moto enregistrée avec succès",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "message", type: "string", example: "Autorisation moto enregistrée avec succès."),
-                        new OA\Property(property: "id", type: "integer", example: 12)
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 400,
-                description: "Erreur de validation ou JSON invalide",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "message", type: "string", example: "Format JSON invalide"),
-                        new OA\Property(
-                            property: "errors",
-                            type: "array",
-                            items: new OA\Items(
-                                type: "object",
-                                properties: [
-                                    new OA\Property(property: "champ", type: "string", example: "telephone_dem"),
-                                    new OA\Property(property: "message", type: "string", example: "Ce champ ne doit pas être vide.")
-                                ]
-                            )
-                        )
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 409,
-                description: "Autorisation déjà existante",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "message", type: "string", example: "Cette autorisation existe déjà.")
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 500,
-                description: "Erreur interne du serveur",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "message", type: "string", example: "Erreur interne : violation de contrainte SQL")
-                    ]
-                )
-            )
-        ]
-    )]
-
-    #[Route('/api/moto-taxi-autorisation', name: 'moto_autorisation_create', methods: ['POST'])]
-    public function createMotoAutorisation(
-        Request $request,
-        EntityManagerInterface $em,
-        ValidatorInterface $validator
-    ): JsonResponse {
-
-        if ($request->getContentTypeFormat() !== 'json') {
-            return $this->json(['message' => 'Content-Type doit être application/json'], 400);
-        }
-
-
-        $data = json_decode($request->getContent(), true);
-        if (!is_array($data)) {
-            return $this->json(['message' => 'Format JSON invalide'], 400);
-        }
-
-
-        $constraints = new Assert\Collection([
-            'matricule' => [new Assert\NotBlank()],
-            'numero_recu' => [new Assert\NotBlank()],
-            'lieu_emission' => [new Assert\NotBlank()],
-            'date_emission' => [new Assert\NotBlank(), new Assert\Date()],
-            'nom_dem' => [new Assert\NotBlank()],
-            'corporation' => [new Assert\NotBlank()],
-            'telephone_dem' => [new Assert\NotBlank(), new Assert\Regex('/^\+?[0-9]{8,15}$/')],
-            'm_matricule' => [new Assert\NotBlank()],
-            'marque_moto' => [new Assert\NotBlank()],
-            'inspecteur1' => [new Assert\NotBlank()],
-            'inspecteur2' => [new Assert\NotBlank()],
-            'inspecteur3' => [new Assert\NotBlank()],
-        ]);
-
 
         $errors = $validator->validate($data, $constraints);
         if (count($errors) > 0) {
@@ -387,95 +172,79 @@ Les champs sont validés avant enregistrement pour garantir la conformité.",
             return $this->json(['errors' => $violations], 400);
         }
 
-
-        $clean = array_map(fn($v) => is_string($v) ? trim($v) : $v, $data);
-
-        $entity = (new SurveillanceTaxiMoto())
-            ->setMatricule($clean['matricule'])
-            ->setNumeroRecu($clean['numero_recu'])
-            ->setLieuEmission($clean['lieu_emission'])
-            ->setDateEmission(new DateTime($clean['date_emission']))
-            ->setNomDem($clean['nom_dem'])
-            ->setCorporation($clean['corporation'])
-            ->setTelephoneDem($clean['telephone_dem'])
-            ->setMMatricule($clean['m_matricule'])
-            ->setMarqueMoto($clean['marque_moto'])
-            ->setInspecteur1($clean['inspecteur1'])
-            ->setInspecteur2($clean['inspecteur2'])
-            ->setInspecteur3($clean['inspecteur3']);
+        $entity = (new AutaurisationConvoiExceptionnel())
+            ->setRequerant($data['requerant'])
+            ->setNationalite($data['nationalite'])
+            ->setTypeDePersonne($data['typeDePersonne'])
+            ->setCoordonnee($data['coordonnee'])
+            ->setTelephone($data['telephone'])
+            ->setImmatriculation($data['immatriculation'])
+            ->setMarque($data['marque'])
+            ->setTypeDeVihicule($data['typeDeVihicule'])
+            ->setTypeDeCharge($data['typeDeCharge'])
+            ->setTonnage($data['tonnage'])
+            ->setCategorie($data['categorie'])
+            ->setLongueur($data['longueur'])
+            ->setLargueur($data['largueur'])
+            ->setHauteur($data['hauteur'])
+            ->setConditionDeSecurite($data['conditionDeSecurite'])
+            ->setHeureDeCirculation($data['heureDeCirculation'])
+            ->setPointDeDepart($data['pointDeDepart'])
+            ->setPointArrive($data['pointArrive'])
+            ->setHeureDeDepart($data['heureDeDepart'])
+            ->setHeureArrivee($data['heureArrivee'])
+            ->setLieuDEmission($data['lieuDEmission'])
+            ->setArrimage($data['arrimage'])
+            ->setSignalisation($data['signalisation'])
+            ->setCentrage($data['centrage']);
 
         try {
             $em->persist($entity);
             $em->flush();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return $this->json(['message' => 'Erreur interne : ' . $e->getMessage()], 500);
         }
 
-
         return $this->json([
-            'message' => 'Autorisation moto enregistrée avec succès.',
+            'message' => 'Autorisation enregistrée avec succès.',
             'id' => $entity->getId()
         ], 201);
     }
 
+
     #[OA\Post(
-        path: "/api/autorisation-materiaux",
-        summary: "Créer une autorisation de transport de matériaux de construction",
-        description: "Permet d’enregistrer une autorisation pour le transport de matériaux (bitume, gravats, sable, ciment, etc.).
-Les informations du véhicule, du responsable, du tonnage et des conditions de circulation sont vérifiées et validées avant enregistrement.",
-        tags: ["Autorisation Matériaux"],
+        path: "/api/autorisation-chargement",
+        summary: "Créer une autorisation de transport de marchandises",
+        description: "Enregistre une autorisation de transport de marchandises avec les informations sur le responsable, le véhicule, le tonnage et la conformité du chargement.",
+        tags: ["Autorisation Marchandises"],
         requestBody: new OA\RequestBody(
             required: true,
-            description: "Toutes les données nécessaires pour enregistrer une autorisation de transport de matériaux de construction.",
+            description: "Toutes les données nécessaires pour enregistrer une autorisation de transport de marchandises.",
             content: new OA\JsonContent(
                 type: "object",
                 required: [
-                    "matricule",
-                    "lieu_emission",
-                    "date_emission",
-                    "r_type",
-                    "r_nationalite",
-                    "r_addresse",
-                    "r_telephone",
-                    "v_matricule",
-                    "v_marque",
-                    "v_type",
-                    "type_charge",
-                    "tonnage_kg",
-                    "r_securite",
-                    "heure_circulation",
-                    "p_depart",
-                    "p_arrivee",
-                    "h_depart",
-                    "h_arrivee",
-                    "arrimage",
-                    "centrage",
-                    "signalisation",
-                    "charge_technique"
+                    "nom", "nationnalite", "organisation", "adresse", "telephone",
+                    "typeDeCharge", "immatriculation", "tonnage", "couverture",
+                    "signalisation", "inspecteurRoutier", "lieuEmission",
+                    "pointDeDepart", "pointArrive", "heureDeDepart", "heureArrivee"
                 ],
                 properties: [
-                    new OA\Property(property: "matricule", type: "string", example: "BTM-2025-0098", description: "Numéro d’enregistrement unique de l’autorisation de transport"),
-                    new OA\Property(property: "lieu_emission", type: "string", example: "Direction Générale des Transports Routiers - Kinshasa", description: "Lieu d’émission de l’autorisation"),
-                    new OA\Property(property: "date_emission", type: "string", format: "date", example: "2025-10-27", description: "Date d’émission (format ISO YYYY-MM-DD)"),
-                    new OA\Property(property: "r_type", type: "string", example: "Entreprise de construction routière", description: "Type de responsable ou entité demandeuse"),
-                    new OA\Property(property: "r_nationalite", type: "string", example: "Congolaise", description: "Nationalité du demandeur"),
-                    new OA\Property(property: "r_addresse", type: "string", example: "Zone industrielle de Limete, Kinshasa", description: "Adresse complète du demandeur"),
-                    new OA\Property(property: "r_telephone", type: "string", example: "+243810000111", description: "Numéro de téléphone du responsable (format international)"),
-                    new OA\Property(property: "v_matricule", type: "string", example: "CGO-4567-AB", description: "Numéro de plaque du véhicule principal"),
-                    new OA\Property(property: "v_marque", type: "string", example: "Mercedes-Benz Actros 3340", description: "Marque et modèle du véhicule"),
-                    new OA\Property(property: "v_type", type: "string", example: "Camion benne", description: "Type du véhicule utilisé pour le transport"),
-                    new OA\Property(property: "type_charge", type: "string", example: "Bitume chaud", description: "Nature du matériau transporté (bitume, gravats, sable, etc.)"),
-                    new OA\Property(property: "tonnage_kg", type: "number", format: "float", example: 35000, description: "Poids total de la charge en kilogrammes"),
-                    new OA\Property(property: "r_securite", type: "string", example: "Escorte requise pour zones urbaines", description: "Mesures ou remarques de sécurité associées au transport"),
-                    new OA\Property(property: "heure_circulation", type: "string", example: "06h00 - 18h00", description: "Heures autorisées de circulation"),
-                    new OA\Property(property: "p_depart", type: "string", example: "Usine d’enrobage, Kintambo", description: "Point de départ du trajet"),
-                    new OA\Property(property: "p_arrivee", type: "string", example: "Chantier RN1 - Kasangulu", description: "Destination finale du convoi"),
-                    new OA\Property(property: "h_depart", type: "string", example: "06:30:00", description: "Heure de départ prévue (HH:MM:SS)"),
-                    new OA\Property(property: "h_arrivee", type: "string", example: "12:45:00", description: "Heure d’arrivée prévue (HH:MM:SS)"),
-                    new OA\Property(property: "arrimage", type: "boolean", example: true, description: "Charge arrimée correctement"),
-                    new OA\Property(property: "centrage", type: "boolean", example: true, description: "Charge bien centrée sur l’essieu"),
-                    new OA\Property(property: "signalisation", type: "boolean", example: true, description: "Signalisation conforme (bâche, gyrophare, panneaux, etc.)"),
-                    new OA\Property(property: "charge_technique", type: "string", example: "Bitume chaud nécessitant une température constante (≥ 150°C)", description: "Informations techniques ou conditions spéciales de transport")
+                    new OA\Property(property: "nom", type: "string", example: "Kibasonga Merdi"),
+                    new OA\Property(property: "nationnalite", type: "string", example: "Congolaise"),
+                    new OA\Property(property: "organisation", type: "string", example: "Transco RDC"),
+                    new OA\Property(property: "adresse", type: "string", example: "Avenue Poids Lourds, Kinshasa"),
+                    new OA\Property(property: "telephone", type: "string", example: "+243810123456"),
+                    new OA\Property(property: "typeDeCharge", type: "string", example: "Matériaux de construction"),
+                    new OA\Property(property: "immatriculation", type: "string", example: "CGO-TRK-087"),
+                    new OA\Property(property: "tonnage", type: "string", example: "27000"),
+                    new OA\Property(property: "couverture", type: "string", example: "Bâche complète"),
+                    new OA\Property(property: "signalisation", type: "string", example: "Gyrophare + panneaux latéraux"),
+                    new OA\Property(property: "inspecteurRoutier", type: "string", example: "Mbuyi Jean-Paul"),
+                    new OA\Property(property: "lieuEmission", type: "string", example: "Direction Provinciale des Transports du Katanga"),
+                    new OA\Property(property: "pointDeDepart", type: "string", example: "Carrière de Mont-Ngafula"),
+                    new OA\Property(property: "pointArrive", type: "string", example: "Chantier Université de Kinshasa"),
+                    new OA\Property(property: "heureDeDepart", type: "string", example: "06:30:00"),
+                    new OA\Property(property: "heureArrivee", type: "string", example: "09:45:00")
                 ]
             )
         ),
@@ -486,8 +255,8 @@ Les informations du véhicule, du responsable, du tonnage et des conditions de c
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
-                        new OA\Property(property: "message", type: "string", example: "Autorisation de convoi enregistrée avec succès."),
-                        new OA\Property(property: "id", type: "integer", example: 15)
+                        new OA\Property(property: "message", type: "string", example: "Autorisation enregistrée avec succès."),
+                        new OA\Property(property: "id", type: "integer", example: 10)
                     ]
                 )
             ),
@@ -498,31 +267,19 @@ Les informations du véhicule, du responsable, du tonnage et des conditions de c
                     type: "object",
                     properties: [
                         new OA\Property(property: "message", type: "string", example: "Format JSON invalide"),
-                        new OA\Property(
-                            property: "errors",
-                            type: "array",
-                            items: new OA\Items(
-                                type: "object",
-                                properties: [
-                                    new OA\Property(property: "champ", type: "string", example: "r_telephone"),
-                                    new OA\Property(property: "message", type: "string", example: "Numéro de téléphone invalide.")
-                                ]
-                            )
-                        )
+                        new OA\Property(property: "errors", type: "array", items: new OA\Items(
+                            type: "object",
+                            properties: [
+                                new OA\Property(property: "champ", type: "string"),
+                                new OA\Property(property: "message", type: "string")
+                            ]
+                        ))
                     ]
                 )
             ),
             new OA\Response(
-                response: 409,
-                description: "Autorisation déjà existante",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [new OA\Property(property: "message", type: "string", example: "Cette autorisation existe déjà.")]
-                )
-            ),
-            new OA\Response(
                 response: 500,
-                description: "Erreur interne lors de l’enregistrement",
+                description: "Erreur interne",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [new OA\Property(property: "message", type: "string", example: "Erreur interne : violation de contrainte SQL")]
@@ -530,18 +287,15 @@ Les informations du véhicule, du responsable, du tonnage et des conditions de c
             )
         ]
     )]
-
-    #[Route('/api/autorisation-materiaux', name: 'autorisation_bitume_create', methods: ['POST'])]
-    public function createAutorisationBitume(
+    #[Route('/api/autorisation-chargement', name: 'autorisation_marchandise_create', methods: ['POST'])]
+    public function createAutorisationChargement(
         Request $request,
         EntityManagerInterface $em,
         ValidatorInterface $validator
     ): JsonResponse {
-
         if ($request->getContentTypeFormat() !== 'json') {
             return $this->json(['message' => 'Content-Type doit être application/json'], 400);
         }
-
 
         $data = json_decode($request->getContent(), true);
         if (!is_array($data)) {
@@ -549,28 +303,22 @@ Les informations du véhicule, du responsable, du tonnage et des conditions de c
         }
 
         $constraints = new Assert\Collection([
-            'matricule' => [new Assert\NotBlank()],
-            'lieu_emission' => [new Assert\NotBlank()],
-            'date_emission' => [new Assert\NotBlank(), new Assert\Date()],
-            'r_type' => [new Assert\NotBlank()],
-            'r_nationalite' => [new Assert\NotBlank()],
-            'r_addresse' => [new Assert\NotBlank()],
-            'r_telephone' => [new Assert\NotBlank(), new Assert\Regex('/^\+?[0-9]{8,15}$/')],
-            'v_matricule' => [new Assert\NotBlank()],
-            'v_marque' => [new Assert\NotBlank()],
-            'v_type' => [new Assert\NotBlank()],
-            'type_charge' => [new Assert\NotBlank()],
-            'tonnage_kg' => [new Assert\NotBlank()],
-            'r_securite' => [new Assert\NotBlank()],
-            'heure_circulation' => [new Assert\NotBlank()],
-            'p_depart' => [new Assert\NotBlank()],
-            'p_arrivee' => [new Assert\NotBlank()],
-            'h_depart' => [new Assert\NotBlank()],
-            'h_arrivee' => [new Assert\NotBlank()],
-            'arrimage' => [new Assert\Type('bool')],
-            'centrage' => [new Assert\Type('bool')],
-            'signalisation' => [new Assert\Type('bool')],
-            'charge_technique' => [new Assert\NotBlank()],
+            'nom' => [new Assert\NotBlank()],
+            'nationnalite' => [new Assert\NotBlank()],
+            'organisation' => [new Assert\NotBlank()],
+            'adresse' => [new Assert\NotBlank()],
+            'telephone' => [new Assert\NotBlank(), new Assert\Regex('/^\+?[0-9]{8,15}$/')],
+            'typeDeCharge' => [new Assert\NotBlank()],
+            'immatriculation' => [new Assert\NotBlank()],
+            'tonnage' => [new Assert\NotBlank()],
+            'couverture' => [new Assert\NotBlank()],
+            'signalisation' => [new Assert\NotBlank()],
+            'inspecteurRoutier' => [new Assert\NotBlank()],
+            'lieuEmission' => [new Assert\NotBlank()],
+            'pointDeDepart' => [new Assert\NotBlank()],
+            'pointArrive' => [new Assert\NotBlank()],
+            'heureDeDepart' => [new Assert\NotBlank()],
+            'heureArrivee' => [new Assert\NotBlank()],
         ]);
 
         $errors = $validator->validate($data, $constraints);
@@ -582,47 +330,211 @@ Les informations du véhicule, du responsable, du tonnage et des conditions de c
             return $this->json(['errors' => $violations], 400);
         }
 
-        $clean = array_map(fn($v) => is_string($v) ? trim($v) : $v, $data);
-
-
-        $entity = (new AutorisationMateriauxConstruction())
-            ->setMatricule($clean['matricule'])
-            ->setLieuEmission($clean['lieu_emission'])
-            ->setDateEmission(new DateTime($clean['date_emission']))
-            ->setRType($clean['r_type'])
-            ->setRNationalite($clean['r_nationalite'])
-            ->setRAddresse($clean['r_addresse'])
-            ->setRTelephone($clean['r_telephone'])
-            ->setVMatricule($clean['v_matricule'])
-            ->setVMarque($clean['v_marque'])
-            ->setVType($clean['v_type'])
-            ->setTypeCharge($clean['type_charge'])
-            ->setTonnageKg($clean['tonnage_kg'])
-            ->setRSecurite($clean['r_securite'])
-            ->setHeureCirculation($clean['heure_circulation'])
-            ->setPDepart($clean['p_depart'])
-            ->setPArrivee($clean['p_arrivee'])
-            ->setHDepart(new DateTime($clean['h_depart']))
-            ->setHArrivee(new DateTime($clean['h_arrivee']))
-            ->setArrimage($clean['arrimage'])
-            ->setCentrage($clean['centrage'])
-            ->setSignalisation($clean['signalisation'])
-            ->setChargeTechnique($clean['charge_technique']);
-
+        $entity = (new SurveillanceTechnique())
+            ->setNom($data['nom'])
+            ->setNationnalite($data['nationnalite'])
+            ->setOrganisation($data['organisation'])
+            ->setAdresse($data['adresse'])
+            ->setTelephone($data['telephone'])
+            ->setTypeDeCharge($data['typeDeCharge'])
+            ->setImmatriculation($data['immatriculation'])
+            ->setTonnage($data['tonnage'])
+            ->setCouverture($data['couverture'])
+            ->setSignalisation($data['signalisation'])
+            ->setInspecteurRoutier($data['inspecteurRoutier'])
+            ->setLieuEmission($data['lieuEmission'])
+            ->setPointDeDepart($data['pointDeDepart'])
+            ->setPointArrive($data['pointArrive'])
+            ->setHeureDeDepart($data['heureDeDepart'])
+            ->setHeureArrivee($data['heureArrivee']);
 
         try {
             $em->persist($entity);
             $em->flush();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return $this->json(['message' => 'Erreur interne : ' . $e->getMessage()], 500);
         }
 
-
         return $this->json([
-            'message' => 'Autorisation de convoi enregistrée avec succès.',
+            'message' => 'Autorisation enregistrée avec succès.',
             'id' => $entity->getId()
         ], 201);
     }
+
+
+    #[OA\Post(
+        path: "/api/autorisation-materiaux",
+        summary: "Créer une autorisation de transport de matériaux de construction",
+        description: "Permet d’enregistrer une autorisation pour le transport de matériaux (bitume, gravats, sable, ciment, etc.).
+Les informations du requérant, du véhicule, du tonnage et des conditions de sécurité sont validées avant enregistrement.",
+        tags: ["Autorisation Matériaux"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            description: "Toutes les données nécessaires pour enregistrer une autorisation de transport de matériaux de construction.",
+            content: new OA\JsonContent(
+                type: "object",
+                required: [
+                    "requerant",
+                    "nationalite",
+                    "typeDePersonne",
+                    "coordonnee",
+                    "telephone",
+                    "immatriculation",
+                    "marque",
+                    "typeDeVihicule",
+                    "typeDeCharge",
+                    "tonnage",
+                    "conditionDeSecurite",
+                    "heureDeCirculation",
+                    "pointDeDepart",
+                    "pointArrive",
+                    "heureDeDepart",
+                    "heureArrivee",
+                    "lieuDEmission"
+                ],
+                properties: [
+                    new OA\Property(property: "requerant", type: "string", example: "Société BTP Congo", description: "Nom du requérant ou entreprise"),
+                    new OA\Property(property: "nationalite", type: "string", example: "Congolaise", description: "Nationalité du requérant"),
+                    new OA\Property(property: "typeDePersonne", type: "string", example: "Entreprise", description: "Type de requérant (Entreprise ou Particulier)"),
+                    new OA\Property(property: "coordonnee", type: "string", example: "Avenue du Port, Kinshasa", description: "Adresse ou coordonnées complètes"),
+                    new OA\Property(property: "telephone", type: "string", example: "+243810000111", description: "Numéro de téléphone du requérant"),
+                    new OA\Property(property: "immatriculation", type: "string", example: "CGO-4567-AB", description: "Numéro de plaque du véhicule"),
+                    new OA\Property(property: "marque", type: "string", example: "Mercedes-Benz Actros 3340", description: "Marque et modèle du véhicule"),
+                    new OA\Property(property: "typeDeVihicule", type: "string", example: "Camion benne", description: "Type de véhicule"),
+                    new OA\Property(property: "typeDeCharge", type: "string", example: "Bitume chaud", description: "Nature du matériau transporté"),
+                    new OA\Property(property: "tonnage", type: "string", example: "35000", description: "Poids total de la charge (en kg)"),
+                    new OA\Property(property: "conditionDeSecurite", type: "string", example: "Escorte requise", description: "Conditions ou remarques de sécurité"),
+                    new OA\Property(property: "heureDeCirculation", type: "string", example: "06h00 - 18h00", description: "Plage horaire autorisée pour la circulation"),
+                    new OA\Property(property: "pointDeDepart", type: "string", example: "Usine d’enrobage, Kintambo", description: "Point de départ du trajet"),
+                    new OA\Property(property: "pointArrive", type: "string", example: "Chantier RN1 - Kasangulu", description: "Point d’arrivée du trajet"),
+                    new OA\Property(property: "heureDeDepart", type: "string", example: "06:30:00", description: "Heure prévue de départ (HH:MM:SS)"),
+                    new OA\Property(property: "heureArrivee", type: "string", example: "12:45:00", description: "Heure prévue d’arrivée (HH:MM:SS)"),
+                    new OA\Property(property: "lieuDEmission", type: "string", example: "Direction Régionale des Transports - Kinshasa", description: "Lieu d’émission de l’autorisation")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: "Autorisation enregistrée avec succès",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "Autorisation enregistrée avec succès."),
+                        new OA\Property(property: "id", type: "integer", example: 1)
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: "Erreur de validation ou JSON invalide",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "Format JSON invalide."),
+                        new OA\Property(
+                            property: "errors",
+                            type: "array",
+                            items: new OA\Items(
+                                type: "object",
+                                properties: [
+                                    new OA\Property(property: "champ", type: "string", example: "telephone"),
+                                    new OA\Property(property: "message", type: "string", example: "Numéro de téléphone invalide.")
+                                ]
+                            )
+                        )
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 500,
+                description: "Erreur interne",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [new OA\Property(property: "message", type: "string", example: "Erreur interne : violation de contrainte SQL.")]
+                )
+            )
+        ]
+    )]
+    #[Route('/api/autorisation-materiaux', name: 'autorisation_materiaux_create', methods: ['POST'])]
+    public function createAutorisationMateriaux(
+        Request $request,
+        EntityManagerInterface $em,
+        ValidatorInterface $validator
+    ): JsonResponse {
+        if ($request->getContentTypeFormat() !== 'json') {
+            return $this->json(['message' => 'Content-Type doit être application/json'], 400);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!is_array($data)) {
+            return $this->json(['message' => 'Format JSON invalide'], 400);
+        }
+
+        $constraints = new Assert\Collection([
+            'requerant' => [new Assert\NotBlank()],
+            'nationalite' => [new Assert\NotBlank()],
+            'typeDePersonne' => [new Assert\NotBlank()],
+            'coordonnee' => [new Assert\NotBlank()],
+            'telephone' => [new Assert\NotBlank(), new Assert\Regex('/^\+?[0-9]{8,15}$/')],
+            'immatriculation' => [new Assert\NotBlank()],
+            'marque' => [new Assert\NotBlank()],
+            'typeDeVihicule' => [new Assert\NotBlank()],
+            'typeDeCharge' => [new Assert\NotBlank()],
+            'tonnage' => [new Assert\NotBlank()],
+            'conditionDeSecurite' => [new Assert\NotBlank()],
+            'heureDeCirculation' => [new Assert\NotBlank()],
+            'pointDeDepart' => [new Assert\NotBlank()],
+            'pointArrive' => [new Assert\NotBlank()],
+            'heureDeDepart' => [new Assert\NotBlank()],
+            'heureArrivee' => [new Assert\NotBlank()],
+            'lieuDEmission' => [new Assert\NotBlank()],
+        ]);
+
+        $errors = $validator->validate($data, $constraints);
+        if (count($errors) > 0) {
+            $violations = [];
+            foreach ($errors as $e) {
+                $violations[] = [
+                    'champ' => $e->getPropertyPath(),
+                    'message' => $e->getMessage(),
+                ];
+            }
+            return $this->json(['errors' => $violations], 400);
+        }
+
+        $entity = (new AutorisationCirculationConstruction())
+            ->setRequerant($data['requerant'])
+            ->setNationalite($data['nationalite'])
+            ->setTypeDePersonne($data['typeDePersonne'])
+            ->setCoordonnee($data['coordonnee'])
+            ->setTelephone($data['telephone'])
+            ->setImmatriculation($data['immatriculation'])
+            ->setMarque($data['marque'])
+            ->setTypeDeVihicule($data['typeDeVihicule'])
+            ->setTypeDeCharge($data['typeDeCharge'])
+            ->setTonnage($data['tonnage'])
+            ->setConditionDeSecurite($data['conditionDeSecurite'])
+            ->setHeureDeCirculation($data['heureDeCirculation'])
+            ->setPointDeDepart($data['pointDeDepart'])
+            ->setPointArrive($data['pointArrive'])
+            ->setHeureDeDepart($data['heureDeDepart'])
+            ->setHeureArrivee($data['heureArrivee'])
+            ->setLieuDEmission($data['lieuDEmission']);
+
+        try {
+            $em->persist($entity);
+            $em->flush();
+        } catch (\Throwable $e) {
+            return $this->json(['message' => 'Erreur interne : ' . $e->getMessage()], 500);
+        }
+
+        return $this->json([
+            'message' => 'Autorisation enregistrée avec succès.',
+            'id' => $entity->getId(),
+        ], 201);
+    }
+
 
     #[OA\Post(
         path: "/api/autorisation-controle",

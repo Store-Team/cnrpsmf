@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AutorisationConvoiExceptionelRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -26,7 +27,7 @@ class AutorisationConvoiExceptionel
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups('api_autorisation_convoi')]
-    private ?\DateTime $date_emission = null;
+    private ?DateTime $date_emission = null;
 
     #[ORM\Column(length: 255)]
     #[Groups('api_autorisation_convoi')]
@@ -94,11 +95,11 @@ class AutorisationConvoiExceptionel
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     #[Groups('api_autorisation_convoi')]
-    private ?\DateTime $h_depart = null;
+    private ?DateTime $h_depart = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     #[Groups('api_autorisation_convoi')]
-    private ?\DateTime $h_arrivee = null;
+    private ?DateTime $h_arrivee = null;
 
     #[ORM\Column]
     #[Groups('api_autorisation_convoi')]
@@ -145,12 +146,12 @@ class AutorisationConvoiExceptionel
         return $this;
     }
 
-    public function getDateEmission(): ?\DateTime
+    public function getDateEmission(): ?DateTime
     {
         return $this->date_emission;
     }
 
-    public function setDateEmission(\DateTime $date_emission): static
+    public function setDateEmission(DateTime $date_emission): static
     {
         $this->date_emission = $date_emission;
 
@@ -349,24 +350,24 @@ class AutorisationConvoiExceptionel
         return $this;
     }
 
-    public function getHDepart(): ?\DateTime
+    public function getHDepart(): ?DateTime
     {
         return $this->h_depart;
     }
 
-    public function setHDepart(\DateTime $h_depart): static
+    public function setHDepart(DateTime $h_depart): static
     {
         $this->h_depart = $h_depart;
 
         return $this;
     }
 
-    public function getHArrivee(): ?\DateTime
+    public function getHArrivee(): ?DateTime
     {
         return $this->h_arrivee;
     }
 
-    public function setHArrivee(\DateTime $h_arrivee): static
+    public function setHArrivee(DateTime $h_arrivee): static
     {
         $this->h_arrivee = $h_arrivee;
 
