@@ -206,9 +206,6 @@ Cette API est utilisée par les services de transport, les BTP, et les autorité
 
         $clean = array_map(fn($v) => is_string($v) ? trim($v) : $v, $data);
 
-
-
-
         $entity = (new AutorisationConvoiExceptionel())
             ->setMatricule($clean['matricule'])
             ->setLieuEmission($clean['lieu_emission'])
@@ -393,14 +390,6 @@ Les champs sont validés avant enregistrement pour garantir la conformité.",
 
         $clean = array_map(fn($v) => is_string($v) ? trim($v) : $v, $data);
 
-
-        $exist = $em->getRepository(SurveillanceTaxiMoto::class)
-            ->findOneBy(['matricule' => $clean['matricule']]);
-        if ($exist) {
-            return $this->json(['message' => 'Cette autorisation existe déjà.'], 409);
-        }
-
-
         $entity = (new SurveillanceTaxiMoto())
             ->setMatricule($clean['matricule'])
             ->setNumeroRecu($clean['numero_recu'])
@@ -558,7 +547,6 @@ Les informations du véhicule, du responsable, du tonnage et des conditions de c
         if (!is_array($data)) {
             return $this->json(['message' => 'Format JSON invalide'], 400);
         }
-
 
         $constraints = new Assert\Collection([
             'matricule' => [new Assert\NotBlank()],
@@ -1168,16 +1156,7 @@ ou la régie financière. Ce document atteste du paiement d’un droit, d’une 
             return $this->json(['errors' => $violations], 400);
         }
 
-
         $clean = array_map(fn($v) => is_string($v) ? trim($v) : $v, $data);
-
-
-        $exist = $em->getRepository(Quittance::class)
-            ->findOneBy(['numeroPerception' => $clean['numero_perception']]);
-        if ($exist) {
-            return $this->json(['message' => 'Cette quittance existe déjà.'], 409);
-        }
-
 
         $entity = (new Quittance())
             ->setMatricule($clean['matricule'])
