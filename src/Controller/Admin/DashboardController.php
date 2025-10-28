@@ -42,7 +42,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('CNRP SMF - Administration')
+            ->setTitle('CNRP SMF -oAdministration')
             ->setFaviconPath('logo.jpg')
             ->setDefaultColorScheme('dark')
             ->renderSidebarMinimized();
