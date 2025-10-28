@@ -5,7 +5,7 @@ nelmio_api_doc:
             description: "API pour la gestion des surveillances maritimes et fluviales"
             version: "1.0.0"
         servers:
-            - url: 'http://localhost:8000'
+            - url: '%env(APP_URL)%'
               description: 'Serveur de développement'
         tags:
             - name: 'Surveillance Taxi Moto'
