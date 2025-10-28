@@ -1,25 +1,17 @@
 nelmio_api_doc:
     documentation:
         info:
-            title: "CNRP SMF API"
-            description: "API pour la gestion des surveillances maritimes et fluviales"
-            version: "1.0.0"
-        servers:
-            - url: '%env(APP_URL)%'
-              description: 'Serveur de développement'
-        tags:
-            - name: 'Surveillance Taxi Moto'
-              description: 'Opérations sur les surveillances de taxi moto'
-            - name: 'Autorisation Convoi Exceptionel'
-              description: 'Opérations sur les autorisations de convoi exceptionel'
-            - name: 'Autorisation Matériaux Construction'
-              description: 'Opérations sur les autorisations de matériaux de construction'
-            - name: 'Inspection Convoi'
-              description: 'Opérations sur les inspections de convoi'
-            - name: 'Surveillance Chargement'
-              description: 'Opérations sur les surveillances de chargement'
-            - name: 'Quittance'
-              description: 'Opérations sur les quittances'
-    areas:
+            title: CNRP SMF API
+            description: API pour la gestion des surveillances maritimes et fluviales
+            version: 1.0.0
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - Bearer: []
+    areas: # to filter documented areas
         path_patterns:
-            - ^/api(?!/doc$)
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
