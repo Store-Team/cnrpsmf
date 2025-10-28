@@ -1,0 +1,225 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <style>
+        .small-box {
+            border-radius: 10px;
+            position: relative;
+            display: block;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+        .small-box > .inner {
+            padding: 10px;
+        }
+        .small-box > .small-box-footer {
+            position: relative;
+            text-align: center;
+            padding: 3px 0;
+            color: #fff;
+            color: rgba(255,255,255,0.8);
+            display: block;
+            z-index: 10;
+            background: rgba(0,0,0,0.1);
+            text-decoration: none;
+        }
+        .small-box > .small-box-footer:hover {
+            color: #fff;
+            background: rgba(0,0,0,0.15);
+        }
+        .small-box h3 {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            white-space: nowrap;
+            padding: 0;
+        }
+        .small-box p {
+            font-size: 1rem;
+        }
+        .small-box .icon {
+            transition: all .3s linear;
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            z-index: 0;
+            font-size: 90px;
+            color: rgba(0,0,0,0.15);
+        }
+        .bg-purple {
+            background-color: #6f42c1 !important;
+            color: white;
+        }
+        .bg-secondary {
+            background-color: #6c757d !important;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block content_title %}
+    <h1 class="content-title">
+        <i class="fas fa-home"></i>
+        Admin cnrp
+    </h1>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Bienvenue dans l'interface d'administration
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Centre National de Régulation du Port - Système de Gestion des Transports</p>
+                    
+                    {# Résumé général #}
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="info-box bg-gradient-info">
+                                <span class="info-box-icon">
+                                    <i class="fas fa-database"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">TOTAL DES ENREGISTREMENTS</span>
+                                    <span class="info-box-number">
+                                        {{ stats.surveillanceTaxiMoto + stats.inspectionConvoi + stats.surveillanceChargement + stats.quittance + stats.autorisationConvoiExceptionel + stats.autorisationMateriauxConstruction }}
+                                    </span>
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: 100%"></div>
+                                    </div>
+                                    <span class="progress-description">
+                                        Toutes les entités confondues
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>{{ stats.surveillanceTaxiMoto }}</h3>
+                                    <p>Surveillance Taxi/Moto</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-motorcycle"></i>
+                                </div>
+                                <a href="{{ ea_url().setController('App\\Controller\\Admin\\SurveillanceTaxiMotoCrudController').setAction('index') }}" class="small-box-footer">
+                                    Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>{{ stats.inspectionConvoi }}</h3>
+                                    <p>Inspections Convoi</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <a href="{{ ea_url().setController('App\\Controller\\Admin\\InspectionConvoiCrudController').setAction('index') }}" class="small-box-footer">
+                                    Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>{{ stats.surveillanceChargement }}</h3>
+                                    <p>Surveillance Chargement</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-boxes"></i>
+                                </div>
+                                <a href="{{ ea_url().setController('App\\Controller\\Admin\\SurveillanceChargementCrudController').setAction('index') }}" class="small-box-footer">
+                                    Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3>{{ stats.quittance }}</h3>
+                                    <p>Quittances</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-receipt"></i>
+                                </div>
+                                <a href="{{ ea_url().setController('App\\Controller\\Admin\\QuittanceCrudController').setAction('index') }}" class="small-box-footer">
+                                    Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-6 col-12">
+                            <div class="small-box bg-purple">
+                                <div class="inner">
+                                    <h3>{{ stats.autorisationConvoiExceptionel }}</h3>
+                                    <p>Autorisations Convoi Exceptionnel</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <a href="{{ ea_url().setController('App\\Controller\\Admin\\AutorisationConvoiExceptionelCrudController').setAction('index') }}" class="small-box-footer">
+                                    Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 col-12">
+                            <div class="small-box bg-secondary">
+                                <div class="inner">
+                                    <h3>{{ stats.autorisationMateriauxConstruction }}</h3>
+                                    <p>Autorisations Matériaux Construction</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-hammer"></i>
+                                </div>
+                                <a href="{{ ea_url().setController('App\\Controller\\Admin\\AutorisationMateriauxConstructionCrudController').setAction('index') }}" class="small-box-footer">
+                                    Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4><i class="fas fa-list"></i> Actions Rapides</h4>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled row">
+                                        <div class="col-md-6">
+                                            <li><a href="{{ ea_url().setController('App\\Controller\\Admin\\SurveillanceTaxiMotoCrudController').setAction('index') }}" class="btn btn-link"><i class="fas fa-motorcycle"></i> Surveillance Taxi/Moto</a></li>
+                                            <li><a href="{{ ea_url().setController('App\\Controller\\Admin\\InspectionConvoiCrudController').setAction('index') }}" class="btn btn-link"><i class="fas fa-truck"></i> Inspection Convoi</a></li>
+                                            <li><a href="{{ ea_url().setController('App\\Controller\\Admin\\QuittanceCrudController').setAction('index') }}" class="btn btn-link"><i class="fas fa-receipt"></i> Quittances</a></li>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <li><a href="{{ ea_url().setController('App\\Controller\\Admin\\AutorisationConvoiExceptionelCrudController').setAction('index') }}" class="btn btn-link"><i class="fas fa-exclamation-triangle"></i> Autorisations Convoi</a></li>
+                                            <li><a href="{{ ea_url().setController('App\\Controller\\Admin\\AutorisationMateriauxConstructionCrudController').setAction('index') }}" class="btn btn-link"><i class="fas fa-hammer"></i> Autorisations Matériaux</a></li>
+                                            <li><a href="/api/doc" class="btn btn-link" target="_blank"><i class="fas fa-book"></i> Documentation API</a></li>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
