@@ -186,8 +186,8 @@ final class AutorisationChargementController extends AbstractController
                     'lieuEmission' => $s->getLieuEmission(),
                     'pointDeDepart' => $s->getPointDeDepart(),
                     'pointArrive' => $s->getPointArrive(),
-                    'heureDeDepart' => $s->getHeureDeDepart()?->format('H:i'),
-                    'heureArrivee' => $s->getHeureArrivee()?->format('H:i'),
+                    'heureDeDepart' => $s->getHeureDeDepart(),
+                    'heureArrivee' => $s->getHeureArrivee(),
                     'createdAt' => $s->getCreatedAt()?->format('Y-m-d H:i:s'),
                 ];
             }

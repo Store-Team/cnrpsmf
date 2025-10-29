@@ -105,8 +105,8 @@ final class AutorisationMateriauxController extends AbstractController
                     'heureDeCirculation' => $a->getHeureDeCirculation(),
                     'pointDeDepart' => $a->getPointDeDepart(),
                     'pointArrive' => $a->getPointArrive(),
-                    'heureDeDepart' => $a->getHeureDeDepart()?->format('H:i'),
-                    'heureArrivee' => $a->getHeureArrivee()?->format('H:i'),
+                    'heureDeDepart' => $a->getHeureDeDepart(),
+                    'heureArrivee' => $a->getHeureArrivee(),
                     'createdAt' => $a->getCreatedAt()?->format('Y-m-d H:i:s'),
                 ];
             }
