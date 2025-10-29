@@ -27,6 +27,16 @@ doctrine:
         controller_resolver:
             auto_mapping: false
 
+
+        dql:
+            string_functions:
+                MONTH: DoctrineExtensions\Query\Mysql\Month
+                YEAR: DoctrineExtensions\Query\Mysql\Year
+                DATE: DoctrineExtensions\Query\Mysql\Date
+                DAY: DoctrineExtensions\Query\Mysql\Day
+                DAYNAME: DoctrineExtensions\Query\Mysql\DayName
+                MONTHNAME: DoctrineExtensions\Query\Mysql\MonthName
+
 when@test:
     doctrine:
         dbal:

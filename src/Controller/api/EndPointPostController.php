@@ -807,7 +807,6 @@ Les informations du requérant, du véhicule, du tonnage et des conditions de s�
             'id' => $entity->getId()
         ], 201);
     }
-
     #[OA\Post(
         path: "/api/quittance-cnpr",
         summary: "Créer une quittance CNPR",
@@ -929,7 +928,6 @@ Les informations du requérant, du véhicule, du tonnage et des conditions de s�
             'id' => $entity->getId()
         ], 201);
     }
-
 
 
 }
