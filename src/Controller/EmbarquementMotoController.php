@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\SurveillanceEmbarquementMoto;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,25 +55,44 @@ final class EmbarquementMotoController extends AbstractController
     #[Route('/api/embarquement-moto/list', name: 'surveillance_embarquement_moto_list', methods: ['GET'])]
     public function listEmbarquementMoto(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $conn = $em->getConnection();
-        $page = max(1, (int)$request->query->get('page', 1));
-        $limit = max(1, (int)$request->query->get('limit', 10));
+        $page = max(1, (int) $request->query->get('page', 1));
+        $limit = max(1, (int) $request->query->get('limit', 10));
         $offset = ($page - 1) * $limit;
 
         try {
-            $sql = "
-            SELECT
-                id, nom, corporation, tel, immatriculation, marque,
-                inspecteurs_routiers AS inspecteursRoutiers,
-                created_at AS createdAt
-            FROM surveillance_embarquement_moto
-            ORDER BY created_at DESC
-            LIMIT :limit OFFSET :offset
-        ";
-            $data = $conn->fetchAllAssociative($sql, ['limit' => $limit, 'offset' => $offset]);
-            $total = (int)$conn->fetchOne("SELECT COUNT(id) FROM surveillance_embarquement_moto");
+            $repo = $em->getRepository(SurveillanceEmbarquementMoto::class);
+
+            // 🔹 Récupération paginée via Doctrine
+            $entries = $repo->createQueryBuilder('s')
+                ->orderBy('s.createdAt', 'DESC')
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+
+            // 🔹 Total global
+            $total = (int) $repo->createQueryBuilder('s')
+                ->select('COUNT(s.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
+
+            // 🔹 Conversion manuelle des entités en tableaux
+            $data = [];
+            foreach ($entries as $s) {
+                $data[] = [
+                    'id' => $s->getId(),
+                    'nom' => $s->getNom(),
+                    'corporation' => $s->getCorporation(),
+                    'tel' => $s->getTel(),
+                    'immatriculation' => $s->getImmatriculation(),
+                    'marque' => $s->getMarque(),
+                    'inspecteursRoutiers' => $s->getInspecteursRoutiers(),
+                    'createdAt' => $s->getCreatedAt()?->format('Y-m-d H:i:s'),
+                ];
+            }
+
         } catch (Throwable $e) {
-            return $this->json(['message' => 'Erreur SQL : '.$e->getMessage()], 500);
+            return $this->json(['message' => 'Erreur : '.$e->getMessage()], 500);
         }
 
         return $this->json([

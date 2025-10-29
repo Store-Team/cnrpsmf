@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\AutaurisationConvoiExceptionnel;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use OpenApi\Attributes as OA;
+use Throwable;
 
 final class AutorisationMateriauxController extends AbstractController
 {
@@ -62,29 +65,54 @@ final class AutorisationMateriauxController extends AbstractController
     #[Route('/api/autorisation-materiaux/list', name: 'autorisation_materiaux_list', methods: ['GET'])]
     public function listMateriaux(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $conn = $em->getConnection();
-        $page = max(1, (int)$request->query->get('page', 1));
-        $limit = max(1, (int)$request->query->get('limit', 10));
+        $page = max(1, (int) $request->query->get('page', 1));
+        $limit = max(1, (int) $request->query->get('limit', 10));
         $offset = ($page - 1) * $limit;
 
         try {
-            $sql = "
-            SELECT
-                id, requerant, nationalite, type_de_personne AS typeDePersonne, coordonnee, telephone,
-                immatriculation, marque, type_de_vihicule AS typeDeVihicule,
-                type_de_charge AS typeDeCharge, tonnage, condition_de_securite AS conditionDeSecurite,
-                heure_de_circulation AS heureDeCirculation, point_de_depart AS pointDeDepart,
-                point_arrive AS pointArrive, heure_de_depart AS heureDeDepart, heure_arrivee AS heureArrivee,
-                created_at AS createdAt
-            FROM autorisation_circulation_construction
-            ORDER BY created_at DESC
-            LIMIT :limit OFFSET :offset
-        ";
+            $repo = $em->getRepository(AutaurisationConvoiExceptionnel::class);
 
-            $data = $conn->fetchAllAssociative($sql, ['limit' => $limit, 'offset' => $offset]);
-            $total = (int) $conn->fetchOne("SELECT COUNT(id) FROM autorisation_circulation_construction");
-        } catch (\Throwable $e) {
-            return $this->json(['message' => 'Erreur SQL : '.$e->getMessage()], 500);
+            // 🔹 Récupération paginée via Doctrine
+            $autorisations = $repo->createQueryBuilder('a')
+                ->orderBy('a.createdAt', 'DESC')
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+
+            // 🔹 Total global
+            $total = (int) $repo->createQueryBuilder('a')
+                ->select('COUNT(a.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
+
+            // 🔹 Conversion manuelle des entités en tableau (comme tu veux)
+            $data = [];
+            foreach ($autorisations as $a) {
+                $data[] = [
+                    'id' => $a->getId(),
+                    'requerant' => $a->getRequerant(),
+                    'nationalite' => $a->getNationalite(),
+                    'typeDePersonne' => $a->getTypeDePersonne(),
+                    'coordonnee' => $a->getCoordonnee(),
+                    'telephone' => $a->getTelephone(),
+                    'immatriculation' => $a->getImmatriculation(),
+                    'marque' => $a->getMarque(),
+                    'typeDeVihicule' => $a->getTypeDeVihicule(),
+                    'typeDeCharge' => $a->getTypeDeCharge(),
+                    'tonnage' => $a->getTonnage(),
+                    'conditionDeSecurite' => $a->getConditionDeSecurite(),
+                    'heureDeCirculation' => $a->getHeureDeCirculation(),
+                    'pointDeDepart' => $a->getPointDeDepart(),
+                    'pointArrive' => $a->getPointArrive(),
+                    'heureDeDepart' => $a->getHeureDeDepart()?->format('H:i'),
+                    'heureArrivee' => $a->getHeureArrivee()?->format('H:i'),
+                    'createdAt' => $a->getCreatedAt()?->format('Y-m-d H:i:s'),
+                ];
+            }
+
+        } catch (Throwable $e) {
+            return $this->json(['message' => 'Erreur : '.$e->getMessage()], 500);
         }
 
         return $this->json([
@@ -115,7 +143,7 @@ final class AutorisationMateriauxController extends AbstractController
         try {
             $total = (int) $em->getConnection()->fetchOne("SELECT COUNT(id) FROM autorisation_circulation_construction");
             return $this->json(['total' => $total]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json(['message' => 'Erreur SQL : '.$e->getMessage()], 500);
         }
     }
@@ -150,7 +178,7 @@ final class AutorisationMateriauxController extends AbstractController
         ";
             $results = $conn->fetchAllAssociative($sql);
             return $this->json($results);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json(['message' => 'Erreur SQL : '.$e->getMessage()], 500);
         }
     }
@@ -184,8 +212,8 @@ final class AutorisationMateriauxController extends AbstractController
             return $this->json(['message' => 'Veuillez spécifier startMonth et endMonth (format: YYYY-MM)'], 400);
         }
 
-        $startDate = "{$startMonth}-01";
-        $endDate = (new \DateTime("{$endMonth}-01"))->modify('last day of this month')->format('Y-m-d');
+        $startDate = "$startMonth-01";
+        $endDate = (new DateTime("$endMonth-01"))->modify('last day of this month')->format('Y-m-d');
         $conn = $em->getConnection();
 
         try {
@@ -199,7 +227,7 @@ final class AutorisationMateriauxController extends AbstractController
             ORDER BY FIELD(jour, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday')
         ";
             $results = $conn->fetchAllAssociative($sql, ['start' => $startDate, 'end' => $endDate]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json(['message' => 'Erreur SQL : '.$e->getMessage()], 500);
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\QuittanceCnpr;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,31 +57,46 @@ final class QuitanceCnprController extends AbstractController
     #[Route('/api/quittance-cnpr/list', name: 'quittance_cnpr_list', methods: ['GET'])]
     public function listQuittances(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $conn = $em->getConnection();
-        $page = max(1, (int)$request->query->get('page', 1));
-        $limit = max(1, (int)$request->query->get('limit', 10));
+        $page = max(1, (int) $request->query->get('page', 1));
+        $limit = max(1, (int) $request->query->get('limit', 10));
         $offset = ($page - 1) * $limit;
 
         try {
-            $sql = "
-            SELECT
-                id, assujetti, numero_de_taxation AS numeroDeTaxation,
-                mode_encaisse_en_chiffres AS modeEncaisseEnChiffres,
-                mode_encaisse_en_lettres AS ModeEncaisseEnLettres,
-                banque_beneficiaire AS banqueBeneficiaire,
-                numero_de_compte AS numeroDeCompte,
-                mode_de_paiement AS modeDePaiement,
-                nature_de_limposition_payee AS natureDeLimpositionPayee,
-                created_at AS createdAt
-            FROM quittance_cnpr
-            ORDER BY created_at DESC
-            LIMIT :limit OFFSET :offset
-        ";
+            $repo = $em->getRepository(QuittanceCnpr::class);
 
-            $data = $conn->fetchAllAssociative($sql, ['limit' => $limit, 'offset' => $offset]);
-            $total = (int)$conn->fetchOne("SELECT COUNT(id) FROM quittance_cnpr");
+            // 🔹 Récupération paginée via Doctrine
+            $quittances = $repo->createQueryBuilder('q')
+                ->orderBy('q.createdAt', 'DESC')
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+
+            // 🔹 Total global
+            $total = (int) $repo->createQueryBuilder('q')
+                ->select('COUNT(q.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
+
+            // 🔹 Conversion manuelle des entités en tableau structuré
+            $data = [];
+            foreach ($quittances as $q) {
+                $data[] = [
+                    'id' => $q->getId(),
+                    'assujetti' => $q->getAssujetti(),
+                    'numeroDeTaxation' => $q->getNumeroDeTaxation(),
+                    'modeEncaisseEnChiffres' => $q->getModeEncaisseEnChiffres(),
+                    'modeEncaisseEnLettres' => $q->getModeEncaisseEnLettres(),
+                    'banqueBeneficiaire' => $q->getBanqueBeneficiaire(),
+                    'numeroDeCompte' => $q->getNumeroDeCompte(),
+                    'modeDePaiement' => $q->getModeDePaiement(),
+                    'natureDeLimpositionPayee' => $q->getNatureDeLimpositionPayee(),
+                    'createdAt' => $q->getCreatedAt()?->format('Y-m-d H:i:s'),
+                ];
+            }
+
         } catch (Throwable $e) {
-            return $this->json(['message' => 'Erreur SQL : '.$e->getMessage()], 500);
+            return $this->json(['message' => 'Erreur : '.$e->getMessage()], 500);
         }
 
         return $this->json([
@@ -89,6 +105,7 @@ final class QuitanceCnprController extends AbstractController
             'total' => $total,
             'data' => $data,
         ]);
+
     }
     #[OA\Get(
         path: "/api/quittance-cnpr/total",

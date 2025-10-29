@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\SurveillanceTechnique;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -145,46 +146,54 @@ final class AutorisationChargementController extends AbstractController
     #[Route('/api/autorisation-chargement/list', name: 'autorisation_chargement_list', methods: ['GET'])]
     public function listAutorisationChargement(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $conn = $em->getConnection();
-
-        $page = max(1, (int)$request->query->get('page', 1));
-        $limit = max(1, (int)$request->query->get('limit', 10));
+        $page = max(1, (int) $request->query->get('page', 1));
+        $limit = max(1, (int) $request->query->get('limit', 10));
         $offset = ($page - 1) * $limit;
 
         try {
-            $sql = "
-            SELECT
-                id,
-                nom,
-                nationnalite,
-                organisation,
-                adresse,
-                telephone,
-                type_de_charge AS typeDeCharge,
-                immatriculation,
-                tonnage,
-                couverture,
-                signalisation,
-                inspecteur_routier AS inspecteurRoutier,
-                lieu_emission AS lieuEmission,
-                point_de_depart AS pointDeDepart,
-                point_arrive AS pointArrive,
-                heure_de_depart AS heureDeDepart,
-                heure_arrivee AS heureArrivee,
-                created_at AS createdAt
-            FROM surveillance_technique
-            ORDER BY created_at DESC
-            LIMIT :limit OFFSET :offset
-        ";
+            $repo = $em->getRepository(SurveillanceTechnique::class);
 
-            $data = $conn->fetchAllAssociative($sql, [
-                'limit' => $limit,
-                'offset' => $offset
-            ]);
+            // 🔹 Récupération paginée
+            $surveillances = $repo->createQueryBuilder('s')
+                ->orderBy('s.createdAt', 'DESC')
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
 
-            $total = (int)$conn->fetchOne("SELECT COUNT(id) FROM surveillance_technique");
+            // 🔹 Total global
+            $total = (int) $repo->createQueryBuilder('s')
+                ->select('COUNT(s.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
+
+            // 🔹 Conversion manuelle des entités en tableau
+            $data = [];
+            foreach ($surveillances as $s) {
+                $data[] = [
+                    'id' => $s->getId(),
+                    'nom' => $s->getNom(),
+                    'nationalite' => $s->getNationnalite(),
+                    'organisation' => $s->getOrganisation(),
+                    'adresse' => $s->getAdresse(),
+                    'telephone' => $s->getTelephone(),
+                    'typeDeCharge' => $s->getTypeDeCharge(),
+                    'immatriculation' => $s->getImmatriculation(),
+                    'tonnage' => $s->getTonnage(),
+                    'couverture' => $s->isCouverture(),
+                    'signalisation' => $s->isSignalisation(),
+                    'inspecteurRoutier' => $s->getInspecteurRoutier(),
+                    'lieuEmission' => $s->getLieuEmission(),
+                    'pointDeDepart' => $s->getPointDeDepart(),
+                    'pointArrive' => $s->getPointArrive(),
+                    'heureDeDepart' => $s->getHeureDeDepart()?->format('H:i'),
+                    'heureArrivee' => $s->getHeureArrivee()?->format('H:i'),
+                    'createdAt' => $s->getCreatedAt()?->format('Y-m-d H:i:s'),
+                ];
+            }
+
         } catch (Throwable $e) {
-            return $this->json(['message' => 'Erreur SQL : '.$e->getMessage()], 500);
+            return $this->json(['message' => 'Erreur : '.$e->getMessage()], 500);
         }
 
         return $this->json([
