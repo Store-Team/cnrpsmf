@@ -48,9 +48,6 @@ class SurveillanceTechnique
     private ?string $inspecteurRoutier = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $lieuEmission = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $pointDeDepart = null;
 
     #[ORM\Column(length: 255)]
@@ -206,17 +203,6 @@ class SurveillanceTechnique
         return $this;
     }
 
-    public function getLieuEmission(): ?string
-    {
-        return $this->lieuEmission;
-    }
-
-    public function setLieuEmission(string $lieuEmission): static
-    {
-        $this->lieuEmission = $lieuEmission;
-
-        return $this;
-    }
 
     public function getPointArrive(): ?string
     {

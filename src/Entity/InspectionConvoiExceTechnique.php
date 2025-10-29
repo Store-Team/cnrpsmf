@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\AutaurisationConvoiExceptionnelRepository;
+use App\Repository\InspectionConvoiExceTechniqueRepository;
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AutaurisationConvoiExceptionnelRepository::class)]
-class AutaurisationConvoiExceptionnel
+#[ORM\Entity(repositoryClass: InspectionConvoiExceTechniqueRepository::class)]
+class InspectionConvoiExceTechnique
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -40,15 +41,6 @@ class AutaurisationConvoiExceptionnel
 
     #[ORM\Column(length: 255)]
     private ?string $typeDeCharge = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $tonnage = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $conditionDeSecurite = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $heureDeCirculation = null;
 
     #[ORM\Column(length: 255)]
     private ?string $pointDeDepart = null;
@@ -85,6 +77,15 @@ class AutaurisationConvoiExceptionnel
 
     #[ORM\Column(length: 255)]
     private ?string $centrage = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $observations = null;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $equipe = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $contact = null;
 
     public function __construct(){
         $this->createdAt = new DateTimeImmutable();
@@ -199,42 +200,6 @@ class AutaurisationConvoiExceptionnel
     public function setTypeDeCharge(string $typeDeCharge): static
     {
         $this->typeDeCharge = $typeDeCharge;
-
-        return $this;
-    }
-
-    public function getTonnage(): ?string
-    {
-        return $this->tonnage;
-    }
-
-    public function setTonnage(string $tonnage): static
-    {
-        $this->tonnage = $tonnage;
-
-        return $this;
-    }
-
-    public function getConditionDeSecurite(): ?string
-    {
-        return $this->conditionDeSecurite;
-    }
-
-    public function setConditionDeSecurite(string $conditionDeSecurite): static
-    {
-        $this->conditionDeSecurite = $conditionDeSecurite;
-
-        return $this;
-    }
-
-    public function getHeureDeCirculation(): ?string
-    {
-        return $this->heureDeCirculation;
-    }
-
-    public function setHeureDeCirculation(string $heureDeCirculation): static
-    {
-        $this->heureDeCirculation = $heureDeCirculation;
 
         return $this;
     }
@@ -380,6 +345,42 @@ class AutaurisationConvoiExceptionnel
     public function setCentrage(string $centrage): static
     {
         $this->centrage = $centrage;
+
+        return $this;
+    }
+
+    public function getObservations(): ?string
+    {
+        return $this->observations;
+    }
+
+    public function setObservations(?string $observations): static
+    {
+        $this->observations = $observations;
+
+        return $this;
+    }
+
+    public function getEquipe(): ?array
+    {
+        return $this->equipe;
+    }
+
+    public function setEquipe(?array $equipe): static
+    {
+        $this->equipe = $equipe;
+
+        return $this;
+    }
+
+    public function getContact(): ?string
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?string $contact): static
+    {
+        $this->contact = $contact;
 
         return $this;
     }

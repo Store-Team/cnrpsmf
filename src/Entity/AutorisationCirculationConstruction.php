@@ -62,9 +62,6 @@ class AutorisationCirculationConstruction
     #[ORM\Column(length: 255)]
     private ?string $heureArrivee = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $lieuDEmission = null;
-
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt;
 
@@ -269,17 +266,6 @@ class AutorisationCirculationConstruction
         return $this;
     }
 
-    public function getLieuDEmission(): ?string
-    {
-        return $this->lieuDEmission;
-    }
-
-    public function setLieuDEmission(string $lieuDEmission): static
-    {
-        $this->lieuDEmission = $lieuDEmission;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?DateTimeImmutable
     {
