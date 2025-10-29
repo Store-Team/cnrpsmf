@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\AutaurisationConvoiExceptionnel;
+use App\Entity\AutorisationCirculationConstruction;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -70,7 +70,7 @@ final class AutorisationMateriauxController extends AbstractController
         $offset = ($page - 1) * $limit;
 
         try {
-            $repo = $em->getRepository(AutaurisationConvoiExceptionnel::class);
+            $repo = $em->getRepository(AutorisationCirculationConstruction::class);
 
             // 🔹 Récupération paginée via Doctrine
             $autorisations = $repo->createQueryBuilder('a')
