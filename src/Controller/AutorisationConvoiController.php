@@ -29,7 +29,7 @@ final class AutorisationConvoiController extends AbstractController
             )
         ]
     )]
-    #[Route('/api/autorisation-convoi/count', name: 'autorisation_convoi_count', methods: ['GET'])]
+    #[Route('/api/autorisation-convoi/total', name: 'autorisation_convoi_count', methods: ['GET'])]
     public function countFiles(EntityManagerInterface $em): JsonResponse
     {
         $total = $em->getRepository(AutaurisationConvoiExceptionnel::class)
