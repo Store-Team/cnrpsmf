@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AutorisationConvoiController extends AbstractController
 {
     #[OA\Get(
-        path: "/api/autorisation-convoi/count",
+        path: "/api/autorisation-convoi/total",
         summary: "Obtenir le nombre total de fichiers générés Statistiques Autorisation Convoi ",
         tags: ["Autorisation Convoi"],
         responses: [
