@@ -70,6 +70,7 @@ final class EmbarquementMotoController extends AbstractController
                 ->getQuery()
                 ->getResult();
 
+                
             // 🔹 Total global
             $total = (int) $repo->createQueryBuilder('s')
                 ->select('COUNT(s.id)')
