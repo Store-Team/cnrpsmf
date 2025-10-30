@@ -109,6 +109,7 @@ final class AutorisationMateriauxController extends AbstractController
                     'heureArrivee' => $a->getHeureArrivee(),
                     'createdAt' => $a->getCreatedAt()?->format('Y-m-d H:i:s'),
                 ];
+                
             }
 
         } catch (Throwable $e) {
