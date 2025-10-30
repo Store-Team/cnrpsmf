@@ -67,12 +67,17 @@ final class AutorisationChargementController extends AbstractController
                 'end' => $endDate
             ]);
         } catch (Throwable $e) {
-            return $this->json(['message' => 'Erreur SQL : '.$e->getMessage()], 500);
+            return $this->json(['message' => 'Erreur SQL : ' . $e->getMessage()], 500);
         }
 
         $joursFr = [
-            'Monday' => 'Lundi', 'Tuesday' => 'Mardi', 'Wednesday' => 'Mercredi',
-            'Thursday' => 'Jeudi', 'Friday' => 'Vendredi', 'Saturday' => 'Samedi', 'Sunday' => 'Dimanche'
+            'Monday' => 'Lundi',
+            'Tuesday' => 'Mardi',
+            'Wednesday' => 'Mercredi',
+            'Thursday' => 'Jeudi',
+            'Friday' => 'Vendredi',
+            'Saturday' => 'Samedi',
+            'Sunday' => 'Dimanche'
         ];
 
         foreach ($results as &$r) {
@@ -180,10 +185,9 @@ final class AutorisationChargementController extends AbstractController
                     'typeDeCharge' => $s->getTypeDeCharge(),
                     'immatriculation' => $s->getImmatriculation(),
                     'tonnage' => $s->getTonnage(),
-                    'couverture' => $s->isCouverture(),
-                    'signalisation' => $s->isSignalisation(),
+                    'couverture' => $s->getCouverture(),
+                    'signalisation' => $s->getSignalisation(),
                     'inspecteurRoutier' => $s->getInspecteurRoutier(),
-                    'lieuEmission' => $s->getLieuEmission(),
                     'pointDeDepart' => $s->getPointDeDepart(),
                     'pointArrive' => $s->getPointArrive(),
                     'heureDeDepart' => $s->getHeureDeDepart(),
@@ -191,9 +195,8 @@ final class AutorisationChargementController extends AbstractController
                     'createdAt' => $s->getCreatedAt()?->format('Y-m-d H:i:s'),
                 ];
             }
-
         } catch (Throwable $e) {
-            return $this->json(['message' => 'Erreur : '.$e->getMessage()], 500);
+            return $this->json(['message' => 'Erreur : ' . $e->getMessage()], 500);
         }
 
         return $this->json([
@@ -283,11 +286,9 @@ final class AutorisationChargementController extends AbstractController
         try {
             $results = $conn->fetchAllAssociative($sql);
         } catch (Throwable $e) {
-            return $this->json(['message' => 'Erreur SQL : '.$e->getMessage()], 500);
+            return $this->json(['message' => 'Erreur SQL : ' . $e->getMessage()], 500);
         }
 
         return $this->json($results);
     }
-
-
 }
