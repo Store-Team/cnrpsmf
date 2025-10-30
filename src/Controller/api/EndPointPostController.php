@@ -199,6 +199,7 @@ final class EndPointPostController extends AbstractController
             'id' => $entity->getId()
         ], 201);
     }
+
     #[OA\Post(
         path: "/api/autorisation-chargement",
         summary: "Créer une autorisation de transport de marchandises",
@@ -210,10 +211,21 @@ final class EndPointPostController extends AbstractController
             content: new OA\JsonContent(
                 type: "object",
                 required: [
-                    "nom", "nationnalite", "organisation", "adresse", "telephone",
-                    "typeDeCharge", "immatriculation", "tonnage", "couverture",
-                    "signalisation", "inspecteurRoutier",
-                    "pointDeDepart", "pointArrive", "heureDeDepart", "heureArrivee"
+                    "nom",
+                    "nationnalite",
+                    "organisation",
+                    "adresse",
+                    "telephone",
+                    "typeDeCharge",
+                    "immatriculation",
+                    "tonnage",
+                    "couverture",
+                    "signalisation",
+                    "inspecteurRoutier",
+                    "pointDeDepart",
+                    "pointArrive",
+                    "heureDeDepart",
+                    "heureArrivee"
                 ],
                 properties: [
                     new OA\Property(property: "nom", type: "string", example: "Kibasonga Merdi"),
@@ -312,22 +324,24 @@ final class EndPointPostController extends AbstractController
             return $this->json(['errors' => $violations], 400);
         }
 
-        $entity = (new SurveillanceTechnique())
-            ->setNom($data['nom'])
-            ->setNationnalite($data['nationnalite'])
-            ->setOrganisation($data['organisation'])
-            ->setAdresse($data['adresse'])
-            ->setTelephone($data['telephone'])
-            ->setTypeDeCharge($data['typeDeCharge'])
-            ->setImmatriculation($data['immatriculation'])
-            ->setTonnage($data['tonnage'])
-            ->setCouverture($data['couverture'])
-            ->setSignalisation($data['signalisation'])
-            ->setInspecteurRoutier($data['inspecteurRoutier'])
-            ->setPointDeDepart($data['pointDeDepart'])
-            ->setPointArrive($data['pointArrive'])
-            ->setHeureDeDepart($data['heureDeDepart'])
-            ->setHeureArrivee($data['heureArrivee']);
+        $entity = new SurveillanceTechnique();
+
+
+        $entity->setNom($data['nom']);
+        $entity->setNationnalite($data['nationnalite']);
+        $entity->setOrganisation($data['organisation']);
+        $entity->setAdresse($data['adresse']);
+        $entity->setTelephone($data['telephone']);
+        $entity->setTypeDeCharge($data['typeDeCharge']);
+        $entity->setImmatriculation($data['immatriculation']);
+        $entity->setTonnage($data['tonnage']);
+        $entity->setCouverture($data['couverture']);
+        $entity->setSignalisation($data['signalisation']);
+        $entity->setInspecteurRoutier($data['inspecteurRoutier']);
+        $entity->setPointDeDepart($data['pointDeDepart']);
+        $entity->setPointArrive($data['pointArrive']);
+        $entity->setHeureDeDepart($data['heureDeDepart']);
+        $entity->setHeureArrivee($data['heureArrivee']);
 
         try {
             $em->persist($entity);
@@ -341,6 +355,7 @@ final class EndPointPostController extends AbstractController
             'id' => $entity->getId()
         ], 201);
     }
+
     #[OA\Post(
         path: "/api/autorisation-materiaux",
         summary: "Créer une autorisation de transport de matériaux de construction",
@@ -517,11 +532,26 @@ Les informations du requérant, du véhicule, du tonnage et des conditions de s�
             content: new OA\JsonContent(
                 type: "object",
                 required: [
-                    "requerant", "nationalite", "typeDePersonne", "coordonnee", "telephone",
-                    "immatriculation", "marque", "typeDeVihicule", "typeDeCharge",
-                    "pointDeDepart", "pointArrive", "heureDeDepart", "heureArrivee",
-                    "categorie", "longueur", "largueur", "hauteur",
-                    "arrimage", "signalisation", "centrage"
+                    "requerant",
+                    "nationalite",
+                    "typeDePersonne",
+                    "coordonnee",
+                    "telephone",
+                    "immatriculation",
+                    "marque",
+                    "typeDeVihicule",
+                    "typeDeCharge",
+                    "pointDeDepart",
+                    "pointArrive",
+                    "heureDeDepart",
+                    "heureArrivee",
+                    "categorie",
+                    "longueur",
+                    "largueur",
+                    "hauteur",
+                    "arrimage",
+                    "signalisation",
+                    "centrage"
                 ],
                 properties: [
                     new OA\Property(property: "requerant", type: "string", example: "Société Générale des Travaux"),
@@ -753,7 +783,7 @@ Les informations du requérant, du véhicule, du tonnage et des conditions de s�
         ]
     )]
     #[Route('/api/embarquement-moto', name: 'surveillance_embarquement_moto_create', methods: ['POST'])]
-    public function createEmbarquementMoto(Request $request, EntityManagerInterface $em, ValidatorInterface $validator):JsonResponse
+    public function createEmbarquementMoto(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): JsonResponse
     {
         if ($request->getContentTypeFormat() !== 'json') {
             return $this->json(['message' => 'Content-Type doit être application/json'], 400);
@@ -928,6 +958,4 @@ Les informations du requérant, du véhicule, du tonnage et des conditions de s�
             'id' => $entity->getId()
         ], 201);
     }
-
-
 }
